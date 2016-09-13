@@ -12,6 +12,8 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
@@ -20,16 +22,14 @@ import android.view.SurfaceHolder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.Wearable;
 
 import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class WatchFace extends CanvasWatchFaceService implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
-
-
+public class WatchFace extends CanvasWatchFaceService {
 
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
@@ -59,7 +59,9 @@ public class WatchFace extends CanvasWatchFaceService implements DataApi.DataLis
         }
     }
 
-    private class Engine extends CanvasWatchFaceService.Engine {
+    private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
+            GoogleApiClient.OnConnectionFailedListener {
+
         final Handler mUpdateTimeHandler = new EngineHandler(this);
         boolean mRegisteredTimeZoneReceiver = false;
         Paint mBackgroundPaint;
@@ -74,7 +76,6 @@ public class WatchFace extends CanvasWatchFaceService implements DataApi.DataLis
             }
         };
         int mTapCount;
-
 
         boolean mLowBitAmbient;
 
@@ -103,6 +104,11 @@ public class WatchFace extends CanvasWatchFaceService implements DataApi.DataLis
         @Override
         public void onConnectionFailed(ConnectionResult connectionResult) {
 
+
+        }
+
+        @Override
+        public void onDataChanged(DataEventBuffer dataEventBuffer) {
 
         }
 
@@ -151,6 +157,8 @@ public class WatchFace extends CanvasWatchFaceService implements DataApi.DataLis
         mTime=new
 
         Time();
+
+
     }
 
     @Override
