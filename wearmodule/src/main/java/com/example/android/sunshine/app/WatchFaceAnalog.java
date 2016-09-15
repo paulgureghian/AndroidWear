@@ -13,11 +13,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
-import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -30,7 +28,7 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public class WatchFace extends CanvasWatchFaceService {
+public class WatchFaceAnalog extends CanvasWatchFaceService {
 
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
@@ -41,15 +39,15 @@ public class WatchFace extends CanvasWatchFaceService {
     }
 
     private static class EngineHandler extends Handler {
-        private final WeakReference<WatchFace.Engine> mWeakReference;
+        private final WeakReference<WatchFaceAnalog.Engine> mWeakReference;
 
-        public EngineHandler(WatchFace.Engine reference) {
+        public EngineHandler(WatchFaceAnalog.Engine reference) {
             mWeakReference = new WeakReference<>(reference);
         }
 
         @Override
         public void handleMessage(Message msg) {
-            WatchFace.Engine engine = mWeakReference.get();
+            WatchFaceAnalog.Engine engine = mWeakReference.get();
             if (engine != null) {
                 switch (msg.what) {
                     case MSG_UPDATE_TIME:
@@ -63,7 +61,7 @@ public class WatchFace extends CanvasWatchFaceService {
     private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(WatchFace.this)
+        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(WatchFaceAnalog.this)
                 .addApi(Wearable.API)
                 .addConnectionCallbacks(this)
                 .addOnConnectionFailedListener(this)
@@ -111,7 +109,7 @@ public class WatchFace extends CanvasWatchFaceService {
         public void onCreate(SurfaceHolder holder) {
             super.onCreate(holder);
 
-            setWatchFaceStyle(new WatchFaceStyle.Builder(WatchFace.this)
+            setWatchFaceStyle(new WatchFaceStyle.Builder(WatchFaceAnalog.this)
 
                     .setCardPeekMode(WatchFaceStyle.PEEK_MODE_SHORT)
                     .setBackgroundVisibility(WatchFaceStyle.BACKGROUND_VISIBILITY_INTERRUPTIVE)
@@ -120,7 +118,7 @@ public class WatchFace extends CanvasWatchFaceService {
                     .build()
             );
 
-            Resources resources = WatchFace.this.getResources();
+            Resources resources = WatchFaceAnalog.this.getResources();
 
             mBackgroundPaint = new Paint();
 
@@ -168,7 +166,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
-            Resources resources = WatchFace.this.getResources();
+            Resources resources = WatchFaceAnalog.this.getResources();
             switch (tapType) {
                 case TAP_TYPE_TOUCH:
 
@@ -248,7 +246,7 @@ public class WatchFace extends CanvasWatchFaceService {
 
             mRegisteredTimeZoneReceiver = true;
             IntentFilter filter = new IntentFilter(Intent.ACTION_TIMEZONE_CHANGED);
-            WatchFace.this.registerReceiver(mTimeZoneReceiver, filter);
+            WatchFaceAnalog.this.registerReceiver(mTimeZoneReceiver, filter);
         }
 
         private void unregisterReceiver() {
@@ -257,7 +255,7 @@ public class WatchFace extends CanvasWatchFaceService {
             }
 
             mRegisteredTimeZoneReceiver = false;
-            WatchFace.this.unregisterReceiver(mTimeZoneReceiver);
+            WatchFaceAnalog.this.unregisterReceiver(mTimeZoneReceiver);
         }
 
         private void updateTimer() {
