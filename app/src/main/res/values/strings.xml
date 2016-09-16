@@ -215,4 +215,12 @@
     <!-- For Google Places API Attributions -->
     <string name="attribution_text">Powered by Google</string>
 
+    <string name="hello">Hello World!</string>
+    <string name="title">Hello Notification!</string>
+    <string name="notification_posted">Notification posted</string>
+
+    <string name="notifiction_button">Send Notification</string>
+    <string name="notification_message">Custom notification message</string>
+
+
 </resources>

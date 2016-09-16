@@ -159,7 +159,31 @@
         <service
             android:name=".WearableListener"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity
+            android:name=".MyStubBroadcastActivity"
+            android:label="MyStubBroadcastActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".WearNotifications"
+            android:allowEmbedded="true"
+            android:exported="true"
+            android:taskAffinity=""
+            android:theme="@android:style/Theme.DeviceDefault.Light"></activity>
+
+        <receiver
+            android:name=".MyPostNotificationReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.example.android.sunshine.app.SHOW_NOTIFICATION" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
