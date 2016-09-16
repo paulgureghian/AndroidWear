@@ -16,6 +16,7 @@ import android.support.annotation.NonNull;
 import android.support.wearable.watchface.CanvasWatchFaceService;
 import android.support.wearable.watchface.WatchFaceStyle;
 import android.text.format.Time;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -29,6 +30,11 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 public class WatchFaceAnalog extends CanvasWatchFaceService {
+
+    private static final String TAG_1 = "onConnected";
+    private static final String TAG_2 = "onConnectionSuspended";
+    private static final String TAG_3 = "onConnectionFailed";
+    private static final String TAG_4 = "onDataChanged";
 
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
@@ -67,25 +73,24 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                 .addOnConnectionFailedListener(this)
                 .build();
 
-
         @Override
         public void onConnected(Bundle bundle) {
-            //Log.e(TAG, "onConnected");
+            Log.e(TAG_1, "onConnected" + bundle);
         }
 
         @Override
         public void onConnectionSuspended(int i) {
-
+            Log.e(TAG_2, "onConnectionSuspended");
         }
 
         @Override
         public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
+            Log.e(TAG_3, "onConnectionFailed");
         }
 
         @Override
         public void onDataChanged(DataEventBuffer dataEventBuffer) {
-
+            Log.e(TAG_4, "onDataChanged");
         }
 
         final Handler mUpdateTimeHandler = new EngineHandler(this);
