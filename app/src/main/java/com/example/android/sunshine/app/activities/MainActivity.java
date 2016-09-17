@@ -10,6 +10,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -49,8 +50,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         setContentView(R.layout.activity_main);
 
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
         FloatingActionButton fab =  (FloatingActionButton) findViewById(R.id.fab);
-        //fab.att
+        fab.attachToRecyclerView(recyclerView);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
