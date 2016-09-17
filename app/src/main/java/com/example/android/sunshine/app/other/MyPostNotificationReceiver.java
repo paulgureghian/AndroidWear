@@ -8,7 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
 
-import com.example.android.sunshine.app.WearNotifications;
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.other.WearNotifications;
 
 public class MyPostNotificationReceiver extends BroadcastReceiver {
     public static final String CONTENT_KEY = "contentText";
