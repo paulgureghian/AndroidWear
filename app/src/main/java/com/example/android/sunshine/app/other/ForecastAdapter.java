@@ -27,8 +27,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.android.sunshine.app.ItemChoiceManager;
-import com.example.android.sunshine.app.Utility;
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.other.ItemChoiceManager;
+import com.example.android.sunshine.app.other.Utility;
 import com.example.android.sunshine.app.activities.ForecastFragment;
 import com.example.android.sunshine.app.data.WeatherContract;
 
