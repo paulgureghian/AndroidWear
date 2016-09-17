@@ -216,11 +216,11 @@
     <string name="attribution_text">Powered by Google</string>
 
     <string name="hello">Hello World!</string>
-    <string name="title">Hello Notification!</string>
+    <string name="title">Notification Test</string>
     <string name="notification_posted">Notification posted</string>
 
     <string name="notifiction_button">Send Notification</string>
     <string name="notification_message">Custom notification message</string>
-
+    <string name="send_notification">Send notification</string>
 
 </resources>

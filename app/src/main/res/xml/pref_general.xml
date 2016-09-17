@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.example.android.sunshine.app.LocationEditTextPreference
+    <com.example.android.sunshine.app.other.LocationEditTextPreference
         android:title="@string/pref_location_label"
         android:key="@string/pref_location_key"
         android:defaultValue="@string/pref_location_default"

@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.other;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -7,6 +7,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.widget.Toast;
+
+import com.example.android.sunshine.app.WearNotifications;
 
 public class MyPostNotificationReceiver extends BroadcastReceiver {
     public static final String CONTENT_KEY = "contentText";

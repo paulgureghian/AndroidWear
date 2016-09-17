@@ -13,12 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.other;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Parcel;
-import android.os.Parcelable;
 import android.support.v4.util.LongSparseArray;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.RecyclerView;
@@ -26,6 +24,8 @@ import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.widget.AbsListView;
 import android.widget.Checkable;
+
+import com.example.android.sunshine.app.activities.MainActivity;
 
 /**
  * The ItemChoiceManager class keeps track of which positions have been selected.  Note that it

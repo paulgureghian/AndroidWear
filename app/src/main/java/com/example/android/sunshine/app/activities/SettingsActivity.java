@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.activities;
 
 import android.annotation.TargetApi;
 import android.content.Intent;
@@ -26,9 +26,10 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+
+import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.location.places.Place;
@@ -136,7 +137,7 @@ public class SettingsActivity extends PreferenceActivity
                     preference.setSummary(stringValue);
             }
         } else {
-            // For other preferences, set the summary to the value's simple string representation.
+            // For com.example.android.sunshine.app.other preferences, set the summary to the value's simple string representation.
             preference.setSummary(stringValue);
         }
 

@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.android.sunshine.app.MainActivity;
+import com.example.android.sunshine.app.activities.MainActivity;
 import com.example.android.sunshine.app.R;
 import com.google.android.gms.gcm.GcmListenerService;
 

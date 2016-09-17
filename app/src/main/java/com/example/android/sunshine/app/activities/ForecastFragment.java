@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.activities;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -45,6 +45,8 @@ import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.TextView;
 
+import com.example.android.sunshine.app.ForecastAdapter;
+import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 
@@ -69,7 +71,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             // In this case the id needs to be fully qualified with a table name, since
             // the content provider joins the location & weather tables in the background
             // (both have an _id column)
-            // On the one hand, that's annoying.  On the other, you can search the weather table
+            // On the one hand, that's annoying.  On the com.example.android.sunshine.app.other, you can search the weather table
             // using the location set by the user, which is only in the Location table.
             // So the convenience is worth it.
             WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,

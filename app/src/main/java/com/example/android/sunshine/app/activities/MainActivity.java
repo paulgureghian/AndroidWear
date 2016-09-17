@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,9 +14,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
+import com.example.android.sunshine.app.other.ForecastAdapter;
+import com.example.android.sunshine.app.R;
+import com.example.android.sunshine.app.other.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.gcm.RegistrationIntentService;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
@@ -27,9 +28,6 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.content.Intent;
-import android.support.v7.app.ActionBar;
-
 
 public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
 
@@ -37,12 +35,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
     public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
-
     private boolean mTwoPane;
     private String mLocation;
-
     int NOTIFICATION_ID = 001;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                     PreferenceManager.getDefaultSharedPreferences(this);
             boolean sentToken = sharedPreferences.getBoolean(SENT_TOKEN_TO_SERVER, false);
             if (!sentToken) {
-                 intent = new Intent(this, RegistrationIntentService.class);
+                intent = new Intent(this, RegistrationIntentService.class);
                 startService(intent);
             }
         }
@@ -209,3 +204,33 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         notificationManagerCompat.notify(NOTIFICATION_ID, notification);
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

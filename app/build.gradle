@@ -38,6 +38,8 @@ dependencies {
     compile 'com.google.android.gms:play-services-gcm:8.3.0'
     compile 'com.google.android.gms:play-services-location:8.3.0'
     compile 'com.google.android.gms:play-services-wearable:8.3.0'
+    compile 'com.afollestad.material-dialogs:core:0.9.0.1'
+    compile 'com.melnykov:floatingactionbutton:1.2.0'
 }
 
 

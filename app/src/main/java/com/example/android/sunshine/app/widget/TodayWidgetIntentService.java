@@ -29,7 +29,7 @@ import android.util.DisplayMetrics;
 import android.util.TypedValue;
 import android.widget.RemoteViews;
 
-import com.example.android.sunshine.app.MainActivity;
+import com.example.android.sunshine.app.activities.MainActivity;
 import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
@@ -136,7 +136,7 @@ public class TodayWidgetIntentService extends IntentService {
         Bundle options = appWidgetManager.getAppWidgetOptions(appWidgetId);
         if (options.containsKey(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH)) {
             int minWidthDp = options.getInt(AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
-            // The width returned is in dp, but we'll convert it to pixels to match the other widths
+            // The width returned is in dp, but we'll convert it to pixels to match the com.example.android.sunshine.app.other widths
             DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
             return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, minWidthDp,
                     displayMetrics);

@@ -1,4 +1,4 @@
-package com.example.android.sunshine.app;
+package com.example.android.sunshine.app.other;
 
 import android.content.Context;
 import android.content.SharedPreferences;
