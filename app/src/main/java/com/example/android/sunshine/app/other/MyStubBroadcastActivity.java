@@ -4,9 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 
-/**
- * Example shell activity which simply broadcasts to our receiver and exits.
- */
+import com.example.android.sunshine.app.R;
+
 public class MyStubBroadcastActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

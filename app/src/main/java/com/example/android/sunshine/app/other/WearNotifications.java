@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.android.sunshine.app.R;
+
 public class WearNotifications extends Activity {
 
     private TextView mTextView;
