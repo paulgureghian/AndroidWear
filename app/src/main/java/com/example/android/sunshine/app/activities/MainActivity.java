@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
@@ -14,7 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-
+import com.melnykov.fab.FloatingActionButton;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.android.sunshine.app.other.ForecastAdapter;
 import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.other.Utility;
@@ -46,6 +48,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         Uri contentUri = getIntent() != null ? getIntent().getData() : null;
 
         setContentView(R.layout.activity_main);
+
+        FloatingActionButton fab =  (FloatingActionButton) findViewById(R.id.fab);
+        //fab.att
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
