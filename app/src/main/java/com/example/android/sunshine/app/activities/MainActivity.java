@@ -50,9 +50,8 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         setContentView(R.layout.activity_main);
 
-        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerview_forecast);
-        FloatingActionButton fab =  (FloatingActionButton) findViewById(R.id.fab);
-        fab.attachToRecyclerView(recyclerView);
+
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

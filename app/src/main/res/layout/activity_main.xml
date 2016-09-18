@@ -1,30 +1,14 @@
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:fab="http://schemas.android.com/tools"
     android:id="@+id/fragment_forecast"
     android:name="com.example.android.sunshine.app.activities.ForecastFragment"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    app:sharedElementTransitions="true">
-
-    <com.melnykov.fab.FloatingActionButton
-    android:id="@+id/fab"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="bottom|end"
-    android:layout_margin="16dp"
-    android:contentDescription="@string/send_notification"
-    android:src="@drawable/ic_add_white_24dp"
-    fab:fab_colorNormal="@color/material_blue_500"
-    fab:fab_colorPressed="@color/material_blue_600"
-    fab:fab_colorRipple="@color/ripple"
-    fab:fab_shadow="true"
-    fab:fab_type="normal"
-    fab:layout_anchor="recycler_view"
-    fab:layout_anchorGravity="bottom | end" />
+    app:sharedElementTransitions="true"/>
 
 
-    </fragment>
+
+
 
 
 
