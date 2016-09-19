@@ -60,9 +60,8 @@
         android:layout_alignRight="@id/layout_center"
         android:layout_below="@id/appbar"
         android:choiceMode="singleChoice"
-        android:autoSelectView="true"
+        app:autoSelectView="true"
         tools:layout="@android:layout/list_content" />
-
 
     <android.support.v7.widget.Space
         android:id="@+id/cardviewAligner"

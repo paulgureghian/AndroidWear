@@ -50,9 +50,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         setContentView(R.layout.activity_main);
 
-
-
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -63,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
         displayBasicNotification(pendingIntent);
-
 
         if (findViewById(R.id.weather_detail_container) != null) {
 
@@ -95,9 +91,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         SunshineSyncAdapter.initializeSyncAdapter(this);
 
-
         if (checkPlayServices()) {
-
 
             SharedPreferences sharedPreferences =
                     PreferenceManager.getDefaultSharedPreferences(this);
@@ -170,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             ActivityCompat.startActivity(this, intent, activityOptions.toBundle());
         }
     }
-
 
     private boolean checkPlayServices() {
         GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();

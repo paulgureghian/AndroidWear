@@ -219,8 +219,8 @@
     <string name="title">Notification Test</string>
     <string name="notification_posted">Notification posted</string>
 
-    <string name="notifiction_button">Send Notification</string>
-    <string name="notification_message">Custom notification message</string>
-    <string name="send_notification">Send notification</string>
-
+    <string name="notifiction_button">Send a Custom Notification</string>
+    <string name="notification_message">Custom Notification Input</string>
+    <string name="send_notification">Send Notification</string>
+    <string name="enter_notification">Enter Notification</string>
 </resources>
