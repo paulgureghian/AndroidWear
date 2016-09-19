@@ -6,8 +6,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.Pair;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +19,10 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.Status;
 import com.melnykov.fab.FloatingActionButton;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.android.sunshine.app.other.ForecastAdapter;
@@ -27,13 +34,40 @@ import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileDescriptor;
+import java.io.PrintWriter;
+import java.net.URL;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.NodeApi;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.common.api.GoogleApiClient.ConnectionCallbacks;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.DataMap;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.widget.Button;
+import android.widget.EditText;
+
+import static android.webkit.ConsoleMessage.MessageLevel.LOG;
+
 public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
 
+    private GoogleApiClient mGoogleApiClient;
+    private static final String LOG_TAG1 = "MainActivity";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
@@ -203,6 +237,70 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 NotificationManagerCompat.from(MainActivity.this);
         notificationManagerCompat.notify(NOTIFICATION_ID, notification);
     }
+
+    private void initGoogleApiClient() {
+
+        if (mGoogleApiClient != null &&
+                mGoogleApiClient.isConnected()) {
+            Log.d(LOG_TAG1, "Connected");
+
+        } else {
+
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(new ConnectionCallbacks() {
+                        @Override
+                        public void onConnected(Bundle connectionHint) {
+                            Log.d(LOG_TAG1, "onConnected: " + connectionHint);
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int cause) {
+                            Log.d(LOG_TAG1, "onConnectionSuspended: " + cause);
+                        }
+                    })
+                    .addOnConnectionFailedListener(new OnConnectionFailedListener() {
+                        @Override
+                        public void onConnectionFailed(ConnectionResult result) {
+                            Log.d(LOG_TAG1, "onConnectionFailed: " + result);
+
+                        }
+                    })
+                    .addApi(Wearable.API)
+                    .build();
+            mGoogleApiClient.connect();
+        }
+    }
+           @Override
+           protected void onStart(){
+           super.onStart();
+               initGoogleApiClient();
+           }
+            @Override
+            protected void onStop(){
+                super.onStop();
+                mGoogleApiClient.disconnect();
+            }
+            @Override
+            protected void onResume(){
+                super.onResume();
+                initGoogleApiClient();
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }
 
 

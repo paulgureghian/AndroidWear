@@ -31,6 +31,7 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.AbsListView;
 import android.widget.TextView;
+
 import com.melnykov.fab.FloatingActionButton;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.example.android.sunshine.app.R;
@@ -38,6 +39,11 @@ import com.example.android.sunshine.app.other.ForecastAdapter;
 import com.example.android.sunshine.app.other.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
+
+import android.app.Notification;
+import android.app.PendingIntent;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -148,29 +154,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View emptyView = rootView.findViewById(R.id.recyclerview_forecast_empty);
         mRecyclerView.setHasFixedSize(true);
 
-        FloatingActionButton fab = (FloatingActionButton)rootView.findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.attachToRecyclerView(mRecyclerView);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick (View v) {
-
-                if (isConnected){
-                    new MaterialDialog.Builder(mContext).title(R.string.notification_message)
-                            .content(R.string.notifiction_button)
-                            .inputType(InputType.TYPE_CLASS_TEXT)
-                            .input(R.string.enter_notification, new MaterialDialog.InputCallback(){
-
-
-
-                            })
-                }
-            }
-
-
-        });
-
-
-
 
         mForecastAdapter = new ForecastAdapter(getActivity(), new ForecastAdapter.ForecastAdapterOnClickHandler() {
             @Override
@@ -183,7 +168,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                         );
             }
         }, emptyView, mChoiceMode);
-
 
         mRecyclerView.setAdapter(mForecastAdapter);
 
@@ -224,7 +208,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             }
         }
 
-
         if (savedInstanceState != null) {
             mForecastAdapter.onRestoreInstanceState(savedInstanceState);
         }
@@ -243,7 +226,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().initLoader(FORECAST_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
-
 
     void onLocationChanged() {
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
@@ -268,7 +250,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                     Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
                 }
             }
-
         }
     }
 
@@ -278,7 +259,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mForecastAdapter.onSaveInstanceState(outState);
         super.onSaveInstanceState(outState);
     }
-
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
@@ -340,9 +320,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 }
             });
         }
-
     }
-
 
     @Override
     public void onDestroy() {
@@ -368,7 +346,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mInitialSelectedDate = initialSelectedDate;
     }
 
-        private void updateEmptyView() {
+    private void updateEmptyView() {
         if (mForecastAdapter.getItemCount() == 0) {
             TextView tv = (TextView) getView().findViewById(R.id.recyclerview_forecast_empty);
             if (null != tv) {
