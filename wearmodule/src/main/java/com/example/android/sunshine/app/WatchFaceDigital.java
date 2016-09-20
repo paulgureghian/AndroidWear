@@ -22,7 +22,6 @@ import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -51,15 +50,10 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
     private static final Typeface NORMAL_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
 
-    /**
-     * Update rate in milliseconds for interactive mode. We update once a second since seconds are
-     * displayed in interactive mode.
-     */
+
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
 
-    /**
-     * Handler message id for updating the time periodically in interactive mode.
-     */
+
     private static final int MSG_UPDATE_TIME = 0;
 
     @Override
@@ -106,10 +100,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         float mXOffset;
         float mYOffset;
 
-        /**
-         * Whether the display supports fewer bits for each color in ambient mode. When true, we
-         * disable anti-aliasing in ambient mode.
-         */
+
         boolean mLowBitAmbient;
 
         @Override
@@ -155,15 +146,14 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             if (visible) {
                 registerReceiver();
 
-                // Update time zone in case it changed while we weren't visible.
+
                 mTime.clear(TimeZone.getDefault().getID());
                 mTime.setToNow();
             } else {
                 unregisterReceiver();
             }
 
-            // Whether the timer should be running depends on whether we're visible (as well as
-            // whether we're in ambient mode), so we may need to start or stop the timer.
+
             updateTimer();
         }
 
@@ -188,7 +178,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         public void onApplyWindowInsets(WindowInsets insets) {
             super.onApplyWindowInsets(insets);
 
-            // Load resources that have alternate values for round watches.
+
             Resources resources = WatchFaceDigital.this.getResources();
             boolean isRound = insets.isRound();
             mXOffset = resources.getDimension(isRound
@@ -222,27 +212,23 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 invalidate();
             }
 
-            // Whether the timer should be running depends on whether we're visible (as well as
-            // whether we're in ambient mode), so we may need to start or stop the timer.
+
             updateTimer();
         }
 
-        /**
-         * Captures tap event (and tap type) and toggles the background color if the user finishes
-         * a tap.
-         */
+
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             Resources resources = WatchFaceDigital.this.getResources();
             switch (tapType) {
                 case TAP_TYPE_TOUCH:
-                    // The user has started touching the screen.
+
                     break;
                 case TAP_TYPE_TOUCH_CANCEL:
-                    // The user has started a different gesture or otherwise cancelled the tap.
+
                     break;
                 case TAP_TYPE_TAP:
-                    // The user has completed the tap gesture.
+
                     mTapCount++;
                     mBackgroundPaint.setColor(resources.getColor(mTapCount % 2 == 0 ?
                             R.color.background : R.color.background2));
@@ -253,14 +239,14 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
 
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
-            // Draw the background.
+
             if (isInAmbientMode()) {
                 canvas.drawColor(Color.BLACK);
             } else {
                 canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
             }
 
-            // Draw H:MM in ambient mode or H:MM:SS in interactive mode.
+
             mTime.setToNow();
             String text = mAmbient
                     ? String.format("%d:%02d", mTime.hour, mTime.minute)
@@ -268,10 +254,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
         }
 
-        /**
-         * Starts the {@link #mUpdateTimeHandler} timer if it should be running and isn't currently
-         * or stops it if it shouldn't be running but currently is.
-         */
+
         private void updateTimer() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
             if (shouldTimerBeRunning()) {
@@ -279,17 +262,12 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             }
         }
 
-        /**
-         * Returns whether the {@link #mUpdateTimeHandler} timer should be running. The timer should
-         * only run when we're visible and in interactive mode.
-         */
+
         private boolean shouldTimerBeRunning() {
             return isVisible() && !isInAmbientMode();
         }
 
-        /**
-         * Handle updating the time periodically in interactive mode.
-         */
+
         private void handleUpdateTimeMessage() {
             invalidate();
             if (shouldTimerBeRunning()) {

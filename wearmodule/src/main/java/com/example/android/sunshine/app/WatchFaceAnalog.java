@@ -9,6 +9,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -24,6 +26,18 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.Asset;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
+import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.MessageApi;
+import com.google.android.gms.wearable.MessageEvent;
+import com.google.android.gms.wearable.Wearable;
+import java.io.InputStream;
+
+
+
 
 import java.lang.ref.WeakReference;
 import java.util.TimeZone;
@@ -31,10 +45,14 @@ import java.util.concurrent.TimeUnit;
 
 public class WatchFaceAnalog extends CanvasWatchFaceService {
 
+    private GoogleApiClient mGoogleApiClient;
+
     private static final String TAG_1 = "onConnected";
     private static final String TAG_2 = "onConnectionSuspended";
     private static final String TAG_3 = "onConnectionFailed";
     private static final String TAG_4 = "onDataChanged";
+    private static final String LOG_TAG = "WatchFaceAnalog";
+
 
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
@@ -67,33 +85,59 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
-        GoogleApiClient mGoogleApiClient = new GoogleApiClient.Builder(WatchFaceAnalog.this)
-                .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .build();
+        private void initGoogleApiClient() {
 
-        @Override
-        public void onConnected(Bundle bundle) {
-            Log.e(TAG_1, "onConnected" + bundle);
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+                        @Override
+                        public void onConnected(Bundle connectionHint) {
+                            Log.d(LOG_TAG, "onConnected: " + connectionHint);
+                            Wearable.MessageApi.addListener(mGoogleApiClient, DataApi.DataListener);
+                        }
+
+                        @Override
+                        public void onConnectionSuspended(int cause) {
+                            Log.d(LOG_TAG, "onConnectionSuspended: " + cause);
+                        }
+                    })
+                    .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+                        @Override
+                        public void onConnectionFailed(ConnectionResult result) {
+                            Log.d(LOG_TAG, "onConnectionFailed: " + result);
+                        }
+                    })
+                    .addApi(Wearable.API)
+                    .build();
+            mGoogleApiClient.connect();
         }
+    }
+    @Override
+    protected void onStart(){
+        super.onStart();
+        initGoogleApiClient();
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        mGoogleApiClient.disconnect();
+    }
 
-        @Override
-        public void onConnectionSuspended(int i) {
-            Log.e(TAG_2, "onConnectionSuspended");
-        }
+    @Override
+    protected void onResume(){
+        super.onResume(){
+            initGoogleApiClient();
 
-        @Override
-        public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-            Log.e(TAG_3, "onConnectionFailed");
-        }
 
-        @Override
-        public void onDataChanged(DataEventBuffer dataEventBuffer) {
-            Log.e(TAG_4, "onDataChanged");
-        }
 
-        final Handler mUpdateTimeHandler = new EngineHandler(this);
+
+
+
+
+
+
+
+
+    final Handler mUpdateTimeHandler = new EngineHandler(this);
         boolean mRegisteredTimeZoneReceiver = false;
         Paint mBackgroundPaint;
         Paint mHandPaint;
@@ -141,6 +185,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
         @Override
         public void onDestroy() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
+            mGoogleApiClient.disconnect();
             super.onDestroy();
         }
 

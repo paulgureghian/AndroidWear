@@ -3,8 +3,6 @@
     package="com.example.android.sunshine.app">
 
     <uses-feature android:name="android.hardware.type.watch" />
-
-    <!-- Required to act as a custom watch face. -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
@@ -26,6 +24,9 @@
             <meta-data
                 android:name="com.google.android.wearable.watchface.preview_circular"
                 android:resource="@drawable/preview_analog" />
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
 
             <intent-filter>
                 <action android:name="android.service.wallpaper.WallpaperService" />
@@ -34,12 +35,32 @@
             </intent-filter>
         </service>
 
+        <service
+            android:name=".WatchFaceDigital"
+            android:label="Digital"
+            android:permission="android.permission.BIND_WALLPAPER">
+
+            <meta-data
+                android:name="android.service.wallpaper"
+                android:resource="@xml/watch_face" />
+            <meta-data
+                android:name="com.google.android.gms.version"
+                android:value="@integer/google_play_services_version" />
+
+            <intent-filter>
+                <action android:name="android.service.wallpaper.WallpaperService" />
+
+                <category android:name="com.google.android.wearable.watchface.category.WATCH_FACE" />
+            </intent-filter>
+
+        </service>
+
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
         <service
-            android:name="service.WearableListener"
+            android:name=".WearableListener"
             android:enabled="true"
             android:exported="true"></service>
     </application>
