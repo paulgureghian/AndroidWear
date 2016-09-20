@@ -84,6 +84,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
 
         setContentView(R.layout.activity_main);
 
+
+
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -160,6 +163,9 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     @Override
     protected void onResume() {
         super.onResume();
+
+        initGoogleApiClient();
+
         String location = Utility.getPreferredLocation(this);
 
         if (location != null && !location.equals(mLocation)) {
@@ -281,9 +287,10 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 mGoogleApiClient.disconnect();
             }
             @Override
-            protected void onResume(){
-                super.onResume();
-                initGoogleApiClient();
+            protected void onDestroy() {
+                super.onDestroy();
+                mGoogleApiClient.disconnect();
+
             }
 
 
