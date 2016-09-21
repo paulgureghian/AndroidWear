@@ -24,6 +24,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IntDef;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.text.format.Time;
@@ -38,6 +40,8 @@ import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
@@ -55,8 +59,10 @@ import java.net.URL;
 import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
-public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
+public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements DataApi.DataListener,
+        GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    private static final String LOG_TAG1 = "SunshineSyncAdapter";
     private GoogleApiClient mGoogleApiClient;
 
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
@@ -80,6 +86,26 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final int INDEX_MIN_TEMP = 2;
     private static final int INDEX_SHORT_DESC = 3;
 
+    @Override
+    public void onConnected(@Nullable Bundle connectionHint) {
+        Log.d(LOG_TAG1, "onConnected: " + connectionHint);
+    }
+
+    @Override
+    public void onConnectionSuspended(int cause) {
+        Log.d(LOG_TAG1, "onConnectionSuspended: " + cause);
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Log.d(LOG_TAG1, "onConnectionFailed: " + connectionResult);
+    }
+
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+
+    }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
     public @interface LocationStatus {
@@ -93,6 +119,21 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
+    }
+    private void initGoogleApiClient() {
+
+        if (mGoogleApiClient != null &&
+                mGoogleApiClient.isConnected()) {
+            Log.d(LOG_TAG1, "Connected");
+
+        } else {
+
+            mGoogleApiClient = new GoogleApiClient.Builder(SunshineSyncAdapter.this)
+
+                    .addApi(Wearable.API)
+                    .build();
+            mGoogleApiClient.connect();
+        }
     }
 
     @Override
@@ -529,56 +570,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         spe.commit();
     }
 
-private void initGoogleApiClient() {
 
-        if (mGoogleApiClient != null &&
-        mGoogleApiClient.isConnected()) {
-        Log.d(LOG_TAG1, "Connected");
-
-        } else {
-
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-        .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
-@Override
-public void onConnected(Bundle connectionHint) {
-        Log.d(LOG_TAG1, "onConnected: " + connectionHint);
-        }
-
-@Override
-public void onConnectionSuspended(int cause) {
-        Log.d(LOG_TAG1, "onConnectionSuspended: " + cause);
-        }
-        })
-        .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
-@Override
-public void onConnectionFailed(ConnectionResult result) {
-        Log.d(LOG_TAG1, "onConnectionFailed: " + result);
-
-        }
-        })
-        .addApi(Wearable.API)
-        .build();
-        mGoogleApiClient.connect();
-        }
-        }
-@Override
-protected void onStart(){
-        super.onStart();
-        initGoogleApiClient();
-        }
-@Override
-protected void onStop(){
-        super.onStop();
-        mGoogleApiClient.disconnect();
-        }
-@Override
-protected void onDestroy() {
-        super.onDestroy();
-        mGoogleApiClient.disconnect();
-
-        }
-
-
+}
 
 
 
