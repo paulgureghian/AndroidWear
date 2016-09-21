@@ -119,22 +119,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
-    }
-    private void initGoogleApiClient() {
 
-        if (mGoogleApiClient != null &&
-                mGoogleApiClient.isConnected()) {
-            Log.d(LOG_TAG1, "Connected");
 
-        } else {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(SunshineSyncAdapter.this)
-
+            mGoogleApiClient = new GoogleApiClient.Builder(context)
+                    .addOnConnectionFailedListener(SunshineSyncAdapter.this)
+                    .addConnectionCallbacks(SunshineSyncAdapter.this)
                     .addApi(Wearable.API)
                     .build();
             mGoogleApiClient.connect();
         }
-    }
+
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
