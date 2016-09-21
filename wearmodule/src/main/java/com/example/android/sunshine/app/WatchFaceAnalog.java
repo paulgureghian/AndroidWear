@@ -84,6 +84,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
+        String maxTemp;
+        String minTemp;
         private static final String COUNT_KEY = "com.example.key.count";
         final Handler mUpdateTimeHandler = new EngineHandler(this);
         GoogleApiClient mGoogleApiClient;
@@ -111,9 +113,14 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
                 if (event.getType() == DataEvent.TYPE_CHANGED) {
                     DataItem item = event.getDataItem();
-                    if (item.getUri().getPath().compareTo("/count") == 0) {
+                    if (item.getUri().getPath().compareTo(PATH.SunhineSyncAdapter) == 0) {
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                        updateCount(dataMap.getInt(COUNT_KEY));
+                       maxTemp = dataMap.getString(INDEX_MAX_TEMP);
+                       minTemp = dataMap.getString(INDEX_MIN_TEMP);
+
+
+
+
                     }
                 } else if (event.getType() == DataEvent.TYPE_DELETED) {
 
@@ -121,9 +128,9 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             }
         }
 
-                private void updateCount (int c) {
 
-                }
+
+
 
         @Override
         public void onConnected(@Nullable Bundle bundle) {
