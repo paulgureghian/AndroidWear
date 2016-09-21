@@ -66,7 +66,6 @@ import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class MainActivity extends AppCompatActivity implements ForecastFragment.Callback {
 
-    private GoogleApiClient mGoogleApiClient;
     private static final String LOG_TAG1 = "MainActivity";
     private final String LOG_TAG = MainActivity.class.getSimpleName();
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
@@ -83,9 +82,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         Uri contentUri = getIntent() != null ? getIntent().getData() : null;
 
         setContentView(R.layout.activity_main);
-
-
-
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -164,8 +160,6 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
     protected void onResume() {
         super.onResume();
 
-        initGoogleApiClient();
-
         String location = Utility.getPreferredLocation(this);
 
         if (location != null && !location.equals(mLocation)) {
@@ -243,72 +237,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
                 NotificationManagerCompat.from(MainActivity.this);
         notificationManagerCompat.notify(NOTIFICATION_ID, notification);
     }
-
-    private void initGoogleApiClient() {
-
-        if (mGoogleApiClient != null &&
-                mGoogleApiClient.isConnected()) {
-            Log.d(LOG_TAG1, "Connected");
-
-        } else {
-
-            mGoogleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(new ConnectionCallbacks() {
-                        @Override
-                        public void onConnected(Bundle connectionHint) {
-                            Log.d(LOG_TAG1, "onConnected: " + connectionHint);
-                        }
-
-                        @Override
-                        public void onConnectionSuspended(int cause) {
-                            Log.d(LOG_TAG1, "onConnectionSuspended: " + cause);
-                        }
-                    })
-                    .addOnConnectionFailedListener(new OnConnectionFailedListener() {
-                        @Override
-                        public void onConnectionFailed(ConnectionResult result) {
-                            Log.d(LOG_TAG1, "onConnectionFailed: " + result);
-
-                        }
-                    })
-                    .addApi(Wearable.API)
-                    .build();
-            mGoogleApiClient.connect();
-        }
-    }
-           @Override
-           protected void onStart(){
-           super.onStart();
-               initGoogleApiClient();
-           }
-            @Override
-            protected void onStop(){
-                super.onStop();
-                mGoogleApiClient.disconnect();
-            }
-            @Override
-            protected void onDestroy() {
-                super.onDestroy();
-                mGoogleApiClient.disconnect();
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+ }
 
 
 

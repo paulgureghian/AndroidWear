@@ -36,6 +36,9 @@ import com.example.android.sunshine.app.R;
 import com.example.android.sunshine.app.other.Utility;
 import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +56,9 @@ import java.util.Vector;
 import java.util.concurrent.ExecutionException;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
+
+    private GoogleApiClient mGoogleApiClient;
+
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
     public static final String ACTION_DATA_UPDATED =
             "com.example.android.sunshine.app.ACTION_DATA_UPDATED";
@@ -93,19 +99,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d(LOG_TAG, "Starting sync");
 
-
         Context context = getContext();
         String locationQuery = Utility.getPreferredLocation(context);
         String locationLatitude = String.valueOf(Utility.getLocationLatitude(context));
         String locationLongitude = String.valueOf(Utility.getLocationLongitude(context));
 
-
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-
         String forecastJsonStr = null;
-
         String format = "json";
         String units = "metric";
         int numDays = 14;
@@ -140,11 +142,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             URL url = new URL(builtUri.toString());
 
-
             urlConnection = (HttpURLConnection) url.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
-
 
             InputStream inputStream = urlConnection.getInputStream();
             StringBuffer buffer = new StringBuffer();
@@ -190,43 +190,31 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         return;
     }
 
-
     private void getWeatherDataFromJson(String forecastJsonStr,
                                         String locationSetting)
             throws JSONException {
 
-
         final String OWM_CITY = "city";
         final String OWM_CITY_NAME = "name";
         final String OWM_COORD = "coord";
-
-
         final String OWM_LATITUDE = "lat";
         final String OWM_LONGITUDE = "lon";
-
-
         final String OWM_LIST = "list";
-
         final String OWM_PRESSURE = "pressure";
         final String OWM_HUMIDITY = "humidity";
         final String OWM_WINDSPEED = "speed";
         final String OWM_WIND_DIRECTION = "deg";
-
-
         final String OWM_TEMPERATURE = "temp";
         final String OWM_MAX = "max";
         final String OWM_MIN = "min";
-
         final String OWM_WEATHER = "weather";
         final String OWM_DESCRIPTION = "main";
         final String OWM_WEATHER_ID = "id";
-
         final String OWM_MESSAGE_CODE = "cod";
 
         try {
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
             Context context = getContext();
-
 
             if (forecastJson.has(OWM_MESSAGE_CODE)) {
                 int errorCode = forecastJson.getInt(OWM_MESSAGE_CODE);
@@ -251,19 +239,14 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             JSONObject cityCoord = cityJson.getJSONObject(OWM_COORD);
             double cityLatitude = cityCoord.getDouble(OWM_LATITUDE);
             double cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
-
             long locationId = addLocation(locationSetting, cityName, cityLatitude, cityLongitude);
 
-
             Vector<ContentValues> cVVector = new Vector<ContentValues>(weatherArray.length());
-
 
             Time dayTime = new Time();
             dayTime.setToNow();
 
-
             int julianStartDay = Time.getJulianDay(System.currentTimeMillis(), dayTime.gmtoff);
-
 
             dayTime = new Time();
 
@@ -274,15 +257,12 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 int humidity;
                 double windSpeed;
                 double windDirection;
-
                 double high;
                 double low;
-
                 String description;
                 int weatherId;
 
                 JSONObject dayForecast = weatherArray.getJSONObject(i);
-
 
                 dateTime = dayTime.setJulianDay(julianStartDay + i);
 
@@ -291,12 +271,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 windSpeed = dayForecast.getDouble(OWM_WINDSPEED);
                 windDirection = dayForecast.getDouble(OWM_WIND_DIRECTION);
 
-
                 JSONObject weatherObject =
                         dayForecast.getJSONArray(OWM_WEATHER).getJSONObject(0);
                 description = weatherObject.getString(OWM_DESCRIPTION);
                 weatherId = weatherObject.getInt(OWM_WEATHER_ID);
-
 
                 JSONObject temperatureObject = dayForecast.getJSONObject(OWM_TEMPERATURE);
                 high = temperatureObject.getDouble(OWM_MAX);
@@ -324,8 +302,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 ContentValues[] cvArray = new ContentValues[cVVector.size()];
                 cVVector.toArray(cvArray);
                 getContext().getContentResolver().bulkInsert(WeatherContract.WeatherEntry.CONTENT_URI, cvArray);
-
-
                 getContext().getContentResolver().delete(WeatherContract.WeatherEntry.CONTENT_URI,
                         WeatherContract.WeatherEntry.COLUMN_DATE + " <= ?",
                         new String[]{Long.toString(dayTime.setJulianDay(julianStartDay - 1))});
@@ -380,7 +356,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                 Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
 
-
                 Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
 
                 if (cursor.moveToFirst()) {
@@ -394,7 +369,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     int artResourceId = Utility.getArtResourceForWeatherCondition(weatherId);
                     String artUrl = Utility.getArtUrlForWeatherCondition(context, weatherId);
 
-
                     @SuppressLint("InlinedApi")
                     int largeIconWidth = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
                             ? resources.getDimensionPixelSize(android.R.dimen.notification_large_icon_width)
@@ -403,7 +377,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     int largeIconHeight = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
                             ? resources.getDimensionPixelSize(android.R.dimen.notification_large_icon_height)
                             : resources.getDimensionPixelSize(R.dimen.notification_large_icon_default);
-
 
                     Bitmap largeIcon;
                     try {
@@ -419,12 +392,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                     }
                     String title = context.getString(R.string.app_name);
 
-
                     String contentText = String.format(context.getString(R.string.format_notification),
                             desc,
                             Utility.formatTemperature(context, high),
                             Utility.formatTemperature(context, low));
-
 
                     NotificationCompat.Builder mBuilder =
                             new NotificationCompat.Builder(getContext())
@@ -434,9 +405,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                                     .setContentTitle(title)
                                     .setContentText(contentText);
 
-
                     Intent resultIntent = new Intent(context, MainActivity.class);
-
 
                     TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
                     stackBuilder.addNextIntent(resultIntent);
@@ -452,7 +421,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
                     mNotificationManager.notify(WEATHER_NOTIFICATION_ID, mBuilder.build());
 
-
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putLong(lastNotificationKey, System.currentTimeMillis());
                     editor.commit();
@@ -461,7 +429,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             }
         }
     }
-
 
     long addLocation(String locationSetting, String cityName, double lat, double lon) {
         long locationId;
@@ -480,18 +447,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
             ContentValues locationValues = new ContentValues();
 
-
             locationValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
             locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
 
-
             Uri insertedUri = getContext().getContentResolver().insert(
                     WeatherContract.LocationEntry.CONTENT_URI,
                     locationValues
             );
-
 
             locationId = ContentUris.parseId(insertedUri);
         }
@@ -518,7 +482,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         }
     }
 
-
     public static void syncImmediately(Context context) {
         Bundle bundle = new Bundle();
         bundle.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
@@ -527,24 +490,19 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
                 context.getString(R.string.content_authority), bundle);
     }
 
-
     public static Account getSyncAccount(Context context) {
 
         AccountManager accountManager =
                 (AccountManager) context.getSystemService(Context.ACCOUNT_SERVICE);
 
-
         Account newAccount = new Account(
                 context.getString(R.string.app_name), context.getString(R.string.sync_account_type));
 
-
         if (null == accountManager.getPassword(newAccount)) {
-
 
             if (!accountManager.addAccountExplicitly(newAccount, "", null)) {
                 return null;
             }
-
 
             onAccountCreated(newAccount, context);
         }
@@ -555,7 +513,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
 
         SunshineSyncAdapter.configurePeriodicSync(context, SYNC_INTERVAL, SYNC_FLEXTIME);
 
-
         ContentResolver.setSyncAutomatically(newAccount, context.getString(R.string.content_authority), true);
 
         syncImmediately(context);
@@ -565,11 +522,65 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
         getSyncAccount(context);
     }
 
-
     static private void setLocationStatus(Context c, @LocationStatus int locationStatus) {
         SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(c);
         SharedPreferences.Editor spe = sp.edit();
         spe.putInt(c.getString(R.string.pref_location_status_key), locationStatus);
         spe.commit();
     }
-}
+
+private void initGoogleApiClient() {
+
+        if (mGoogleApiClient != null &&
+        mGoogleApiClient.isConnected()) {
+        Log.d(LOG_TAG1, "Connected");
+
+        } else {
+
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+        .addConnectionCallbacks(new GoogleApiClient.ConnectionCallbacks() {
+@Override
+public void onConnected(Bundle connectionHint) {
+        Log.d(LOG_TAG1, "onConnected: " + connectionHint);
+        }
+
+@Override
+public void onConnectionSuspended(int cause) {
+        Log.d(LOG_TAG1, "onConnectionSuspended: " + cause);
+        }
+        })
+        .addOnConnectionFailedListener(new GoogleApiClient.OnConnectionFailedListener() {
+@Override
+public void onConnectionFailed(ConnectionResult result) {
+        Log.d(LOG_TAG1, "onConnectionFailed: " + result);
+
+        }
+        })
+        .addApi(Wearable.API)
+        .build();
+        mGoogleApiClient.connect();
+        }
+        }
+@Override
+protected void onStart(){
+        super.onStart();
+        initGoogleApiClient();
+        }
+@Override
+protected void onStop(){
+        super.onStop();
+        mGoogleApiClient.disconnect();
+        }
+@Override
+protected void onDestroy() {
+        super.onDestroy();
+        mGoogleApiClient.disconnect();
+
+        }
+
+
+
+
+
+
+
