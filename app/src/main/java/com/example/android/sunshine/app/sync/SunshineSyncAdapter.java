@@ -40,8 +40,15 @@ import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.wearable.DataApi;
+import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
+import com.google.android.gms.wearable.DataItem;
+import com.google.android.gms.wearable.DataMap;
+import com.google.android.gms.wearable.DataMapItem;
+import com.google.android.gms.wearable.PutDataMapRequest;
+import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
 
 import org.json.JSONArray;
@@ -61,9 +68,10 @@ import java.util.concurrent.ExecutionException;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
-
-    private static final String LOG_TAG1 = "SunshineSyncAdapter";
     private GoogleApiClient mGoogleApiClient;
+    private static final String LOG_TAG1 = "SunshineSyncAdapter";
+
+    public static final String PATH = "/location";
 
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
     public static final String ACTION_DATA_UPDATED =
@@ -89,6 +97,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     @Override
     public void onConnected(@Nullable Bundle connectionHint) {
         Log.d(LOG_TAG1, "onConnected: " + connectionHint);
+        Wearable.DataApi.addListener(mGoogleApiClient, this);
+
     }
 
     @Override
@@ -102,7 +112,18 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     }
 
     @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+    public void onDataChanged(DataEventBuffer dataEvents) {
+
+        for (DataEvent event : dataEvents) {
+            if (event.getType() == DataEvent.TYPE_CHANGED){
+                DataItem item = event.getDataItem();
+                if (item.getUri().getPath().compareTo("/location"))
+                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                     changeLocation(dataMap.getString(PATH));
+            }
+
+        }else if (event.getType() == DataEvent.TYPE_DELETED)
+
 
     }
 
@@ -120,15 +141,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
-
-            mGoogleApiClient = new GoogleApiClient.Builder(context)
-                    .addOnConnectionFailedListener(SunshineSyncAdapter.this)
-                    .addConnectionCallbacks(SunshineSyncAdapter.this)
-                    .addApi(Wearable.API)
-                    .build();
+                 mGoogleApiClient = new GoogleApiClient.Builder(context)
+                .addOnConnectionFailedListener(SunshineSyncAdapter.this)
+                .addConnectionCallbacks(SunshineSyncAdapter.this)
+                .addApi(Wearable.API)
+                .build();
             mGoogleApiClient.connect();
         }
-
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
@@ -564,7 +583,15 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
         spe.commit();
     }
 
+        public void changeLocation() {
 
+            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/location");
+            putDataMapRequest.getDataMap().putString(PATH);
+            PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
+            PendingResult<DataApi.DataItemResult> pendingResult =
+                    Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
+
+        }
 }
 
 
