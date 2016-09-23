@@ -73,6 +73,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
 
     public static final String PATH = "/location";
 
+    public String HIGH_TEMP = "high_temp";
+    public String LOW_TEMP  = "low_temp";
+    public String WEATHER = "weather";
+    public String DESC = "desc";
+
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
     public static final String ACTION_DATA_UPDATED =
             "com.example.android.sunshine.app.ACTION_DATA_UPDATED";
@@ -115,18 +120,18 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     public void onDataChanged(DataEventBuffer dataEvents) {
 
         for (DataEvent event : dataEvents) {
-            if (event.getType() == DataEvent.TYPE_CHANGED){
+            if (event.getType() == DataEvent.TYPE_CHANGED) {
                 DataItem item = event.getDataItem();
                 if (item.getUri().getPath().compareTo("/location"))
                     DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                     changeLocation(dataMap.getString(PATH));
+                notifyWeather(dataMap.getString(PATH));
             }
 
-        }else if (event.getType() == DataEvent.TYPE_DELETED)
+        }else if (event.getType() == DataEvent.TYPE_DELETED) {
 
 
+        }
     }
-
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
     public @interface LocationStatus {
@@ -392,6 +397,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     }
 
     private void notifyWeather() {
+
         Context context = getContext();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -417,6 +423,16 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                     double high = cursor.getDouble(INDEX_MAX_TEMP);
                     double low = cursor.getDouble(INDEX_MIN_TEMP);
                     String desc = cursor.getString(INDEX_SHORT_DESC);
+
+                    PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/location");
+                    putDataMapRequest.getDataMap().putDouble(HIGH_TEMP,  high);
+                    PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
+                    PendingResult<DataApi.DataItemResult> pendingResult =
+                            Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
+
+
+
+
 
                     int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
                     Resources resources = context.getResources();
@@ -481,6 +497,12 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                 }
                 cursor.close();
             }
+
+
+
+
+
+
         }
     }
 
@@ -583,16 +605,10 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
         spe.commit();
     }
 
-        public void changeLocation() {
 
-            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/location");
-            putDataMapRequest.getDataMap().putString(PATH);
-            PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-            PendingResult<DataApi.DataItemResult> pendingResult =
-                    Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
 
         }
-}
+
 
 
 

@@ -18,27 +18,17 @@ import com.example.android.sunshine.app.other.Utility;
 import com.example.android.sunshine.app.activities.ForecastFragment;
 import com.example.android.sunshine.app.data.WeatherContract;
 
-/**
- * {@link ForecastAdapter} exposes a list of weather forecasts
- * from a {@link android.database.Cursor} to a {@link android.support.v7.widget.RecyclerView}.
- */
 public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.ForecastAdapterViewHolder> {
 
     private static final int VIEW_TYPE_TODAY = 0;
     private static final int VIEW_TYPE_FUTURE_DAY = 1;
-
-    // Flag to determine if we want to use a separate view for "today".
     private boolean mUseTodayLayout = true;
-
     private Cursor mCursor;
     final private Context mContext;
     final private ForecastAdapterOnClickHandler mClickHandler;
     final private View mEmptyView;
     final private ItemChoiceManager mICM;
 
-    /**
-     * Cache of the children views for a forecast list item.
-     */
     public class ForecastAdapterViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public final ImageView mIconView;
         public final TextView mDateView;
@@ -78,14 +68,6 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
         mICM.setChoiceMode(choiceMode);
     }
 
-    /*
-        This takes advantage of the fact that the viewGroup passed to onCreateViewHolder is the
-        RecyclerView that will be used to contain the view, so that it can get the current
-        ItemSelectionManager from the view.
-
-        One could implement this pattern without modifying RecyclerView by taking advantage
-        of the view tag to store the ItemChoiceManager.
-     */
     @Override
     public ForecastAdapterViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
         if ( viewGroup instanceof RecyclerView ) {
@@ -135,34 +117,22 @@ public class ForecastAdapter extends RecyclerView.Adapter<ForecastAdapter.Foreca
                     .into(forecastAdapterViewHolder.mIconView);
         }
 
-        // this enables better animations. even if we lose state due to a device rotation,
-        // the animator can use this to re-find the original view
         ViewCompat.setTransitionName(forecastAdapterViewHolder.mIconView, "iconView" + position);
 
-        // Read date from cursor
         long dateInMillis = mCursor.getLong(ForecastFragment.COL_WEATHER_DATE);
 
-        // Find TextView and set formatted date on it
         forecastAdapterViewHolder.mDateView.setText(Utility.getFriendlyDayString(mContext, dateInMillis, useLongToday));
 
-        // Read weather forecast from cursor
         String description = Utility.getStringForWeatherCondition(mContext, weatherId);
 
-        // Find TextView and set weather forecast on it
         forecastAdapterViewHolder.mDescriptionView.setText(description);
         forecastAdapterViewHolder.mDescriptionView.setContentDescription(mContext.getString(R.string.a11y_forecast, description));
 
-        // For accessibility, we don't want a content description for the icon field
-        // because the information is repeated in the description view and the icon
-        // is not individually selectable
-
-        // Read high temperature from cursor
         double high = mCursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
         String highString = Utility.formatTemperature(mContext, high);
         forecastAdapterViewHolder.mHighTempView.setText(highString);
         forecastAdapterViewHolder.mHighTempView.setContentDescription(mContext.getString(R.string.a11y_high_temp, highString));
 
-        // Read low temperature from cursor
         double low = mCursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
         String lowString = Utility.formatTemperature(mContext, low);
         forecastAdapterViewHolder.mLowTempView.setText(lowString);

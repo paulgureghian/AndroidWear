@@ -1,18 +1,3 @@
-/*
- * Copyright (C) 2015 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package com.example.android.sunshine.app.muzei;
 
 import android.content.Intent;
@@ -26,15 +11,12 @@ import com.example.android.sunshine.app.sync.SunshineSyncAdapter;
 import com.google.android.apps.muzei.api.Artwork;
 import com.google.android.apps.muzei.api.MuzeiArtSource;
 
-/**
- * Muzei source that changes your background based on the current weather conditions
- */
 public class WeatherMuzeiSource extends MuzeiArtSource {
     private static final String[] FORECAST_COLUMNS = new String[]{
             WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
             WeatherContract.WeatherEntry.COLUMN_SHORT_DESC
     };
-    // these indices must match the projection
+
     private static final int INDEX_WEATHER_ID = 0;
     private static final int INDEX_SHORT_DESC = 1;
 
@@ -64,7 +46,7 @@ public class WeatherMuzeiSource extends MuzeiArtSource {
             String desc = cursor.getString(INDEX_SHORT_DESC);
 
             String imageUrl = Utility.getImageUrlForWeatherCondition(weatherId);
-            // Only publish a new wallpaper if we have a valid image
+
             if (imageUrl != null) {
                 publishArtwork(new Artwork.Builder()
                         .imageUri(Uri.parse(imageUrl))

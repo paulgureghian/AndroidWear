@@ -7,13 +7,11 @@ import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Bundle;
 
-
 public class SunshineAuthenticator extends AbstractAccountAuthenticator {
 
     public SunshineAuthenticator(Context context) {
         super(context);
     }
-
 
     @Override
     public Bundle editProperties(
@@ -21,7 +19,6 @@ public class SunshineAuthenticator extends AbstractAccountAuthenticator {
         throw new UnsupportedOperationException();
     }
 
-    // Because we're not actually adding an account to the device, just return null.
     @Override
     public Bundle addAccount(
             AccountAuthenticatorResponse r,
@@ -32,8 +29,7 @@ public class SunshineAuthenticator extends AbstractAccountAuthenticator {
         return null;
     }
 
-    // Ignore attempts to confirm credentials
-    @Override
+        @Override
     public Bundle confirmCredentials(
             AccountAuthenticatorResponse r,
             Account account,
@@ -41,7 +37,6 @@ public class SunshineAuthenticator extends AbstractAccountAuthenticator {
         return null;
     }
 
-    // Getting an authentication token is not supported
     @Override
     public Bundle getAuthToken(
             AccountAuthenticatorResponse r,
@@ -51,13 +46,11 @@ public class SunshineAuthenticator extends AbstractAccountAuthenticator {
         throw new UnsupportedOperationException();
     }
 
-    // Getting a label for the auth token is not supported
-    @Override
+        @Override
     public String getAuthTokenLabel(String s) {
         throw new UnsupportedOperationException();
     }
 
-    // Updating user credentials is not supported
     @Override
     public Bundle updateCredentials(
             AccountAuthenticatorResponse r,
@@ -66,8 +59,7 @@ public class SunshineAuthenticator extends AbstractAccountAuthenticator {
         throw new UnsupportedOperationException();
     }
 
-    // Checking features for the account is not supported
-    @Override
+        @Override
     public Bundle hasFeatures(
             AccountAuthenticatorResponse r,
             Account account, String[] strings) throws NetworkErrorException {
