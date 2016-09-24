@@ -20,6 +20,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -41,6 +42,7 @@ import com.example.android.sunshine.app.muzei.WeatherMuzeiSource;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -72,11 +74,11 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     private static final String LOG_TAG1 = "SunshineSyncAdapter";
 
     public static final String PATH = "/location";
-
+    public String WEATHER = "weather";
     public String HIGH_TEMP = "high_temp";
     public String LOW_TEMP  = "low_temp";
-    public String WEATHER = "weather";
     public String DESC = "desc";
+    public final String TAG = "Data_item_set";
 
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
     public static final String ACTION_DATA_UPDATED =
@@ -398,6 +400,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
 
     private void notifyWeather() {
 
+
+
         Context context = getContext();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -424,13 +428,24 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                     double low = cursor.getDouble(INDEX_MIN_TEMP);
                     String desc = cursor.getString(INDEX_SHORT_DESC);
 
+
                     PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/location");
+                    putDataMapRequest.getDataMap().putInt(WEATHER, weatherId);
                     putDataMapRequest.getDataMap().putDouble(HIGH_TEMP,  high);
+                    putDataMapRequest.getDataMap().putDouble(LOW_TEMP, low);
+                    putDataMapRequest.getDataMap().putString(DESC, desc);
                     PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
                     PendingResult<DataApi.DataItemResult> pendingResult =
                             Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
 
-
+                    pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+                        @Override
+                        public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
+                            if (dataItemResult.getStatus().isSuccess()) {
+                                Log.d(TAG, "Data item set: " + dataItemResult.getDataItem().getUri());
+                            }
+                        }
+                    });
 
 
 
