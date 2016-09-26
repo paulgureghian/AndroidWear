@@ -43,6 +43,7 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.wearable.Asset;
 import com.google.android.gms.wearable.DataApi;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
@@ -58,6 +59,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -76,8 +78,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     public static final String PATH = "/location";
     public String WEATHER = "weather";
     public String HIGH_TEMP = "high_temp";
-    public String LOW_TEMP  = "low_temp";
+    public String LOW_TEMP = "low_temp";
     public String DESC = "desc";
+    public String ICON = "icon";
     public final String TAG = "Data_item_set";
 
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
@@ -105,7 +108,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     public void onConnected(@Nullable Bundle connectionHint) {
         Log.d(LOG_TAG1, "onConnected: " + connectionHint);
         Wearable.DataApi.addListener(mGoogleApiClient, this);
-
     }
 
     @Override
@@ -121,19 +123,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
 
-        for (DataEvent event : dataEvents) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-                DataItem item = event.getDataItem();
-                if (item.getUri().getPath().compareTo("/location"))
-                    DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                notifyWeather(dataMap.getString(PATH));
-            }
-
-        }else if (event.getType() == DataEvent.TYPE_DELETED) {
-
-
-        }
     }
+
     @Retention(RetentionPolicy.SOURCE)
     @IntDef({LOCATION_STATUS_OK, LOCATION_STATUS_SERVER_DOWN, LOCATION_STATUS_SERVER_INVALID, LOCATION_STATUS_UNKNOWN, LOCATION_STATUS_INVALID})
     public @interface LocationStatus {
@@ -148,13 +139,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
         super(context, autoInitialize);
 
-                 mGoogleApiClient = new GoogleApiClient.Builder(context)
+        mGoogleApiClient = new GoogleApiClient.Builder(context)
                 .addOnConnectionFailedListener(SunshineSyncAdapter.this)
                 .addConnectionCallbacks(SunshineSyncAdapter.this)
                 .addApi(Wearable.API)
                 .build();
-            mGoogleApiClient.connect();
-        }
+        mGoogleApiClient.connect();
+    }
 
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
@@ -186,7 +177,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
             final String APPID_PARAM = "APPID";
 
             Uri.Builder uriBuilder = Uri.parse(FORECAST_BASE_URL).buildUpon();
-
 
             if (Utility.isLocationLatLonAvailable(context)) {
                 uriBuilder.appendQueryParameter(LAT_PARAM, locationLatitude)
@@ -400,8 +390,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
 
     private void notifyWeather() {
 
-
-
         Context context = getContext();
 
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -428,12 +416,21 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                     double low = cursor.getDouble(INDEX_MIN_TEMP);
                     String desc = cursor.getString(INDEX_SHORT_DESC);
 
+                    int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+                    Resources resources = context.getResources();
+                    int artResourceId = Utility.getArtResourceForWeatherCondition(weatherId);
+                    String artUrl = Utility.getArtUrlForWeatherCondition(context, weatherId);
+
+                    Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), iconId);
+                    Asset asset = createAssetFromBitMap(bitmap);
 
                     PutDataMapRequest putDataMapRequest = PutDataMapRequest.create("/location");
                     putDataMapRequest.getDataMap().putInt(WEATHER, weatherId);
-                    putDataMapRequest.getDataMap().putDouble(HIGH_TEMP,  high);
+                    putDataMapRequest.getDataMap().putDouble(HIGH_TEMP, high);
                     putDataMapRequest.getDataMap().putDouble(LOW_TEMP, low);
                     putDataMapRequest.getDataMap().putString(DESC, desc);
+                    putDataMapRequest.getDataMap().putAsset(ICON, asset);
+
                     PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
                     PendingResult<DataApi.DataItemResult> pendingResult =
                             Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
@@ -446,13 +443,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                             }
                         }
                     });
-
-
-
-                    int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
-                    Resources resources = context.getResources();
-                    int artResourceId = Utility.getArtResourceForWeatherCondition(weatherId);
-                    String artUrl = Utility.getArtUrlForWeatherCondition(context, weatherId);
 
                     @SuppressLint("InlinedApi")
                     int largeIconWidth = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
@@ -512,13 +502,13 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                 }
                 cursor.close();
             }
-
-
-
-
-
-
         }
+    }
+
+    private Asset createAssetFromBitMap(Bitmap bitmap) {
+        final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
+        return Asset.createFromBytes(byteStream.toByteArray());
     }
 
     long addLocation(String locationSetting, String cityName, double lat, double lon) {
@@ -555,7 +545,6 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
 
         return locationId;
     }
-
 
     public static void configurePeriodicSync(Context context, int syncInterval, int flexTime) {
         Account account = getSyncAccount(context);
@@ -619,10 +608,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
         spe.putInt(c.getString(R.string.pref_location_status_key), locationStatus);
         spe.commit();
     }
-
-
-
-        }
+}
 
 
 
