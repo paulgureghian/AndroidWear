@@ -81,6 +81,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
     public String LOW_TEMP = "low_temp";
     public String DESC = "desc";
     public String ICON = "icon";
+    public String TIME = "time";
     public final String TAG = "Data_item_set";
 
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
@@ -423,15 +424,17 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                 putDataMapRequest.getDataMap().putDouble(LOW_TEMP, low);
                 putDataMapRequest.getDataMap().putString(DESC, desc);
                 putDataMapRequest.getDataMap().putAsset(ICON, asset);
+                putDataMapRequest.getDataMap().putLong(TIME,System.currentTimeMillis());
 
                 PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
+                putDataRequest.setUrgent();
                 PendingResult<DataApi.DataItemResult> pendingResult =
                         Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
 
                 pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
                     @Override
                     public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
-                        if (!dataItemResult.getStatus().isSuccess()) {
+                        if (dataItemResult.getStatus().isSuccess()) {
                             Log.d(TAG, "Data item set: " + dataItemResult.getDataItem().getUri());
 
                         } else {
