@@ -401,56 +401,51 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
         Uri weatherUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(locationQuery, System.currentTimeMillis());
         Cursor cursor = context.getContentResolver().query(weatherUri, NOTIFY_WEATHER_PROJECTION, null, null, null);
 
-                if (cursor.moveToFirst()) {
-                    int weatherId = cursor.getInt(INDEX_WEATHER_ID);
-                    double high = cursor.getDouble(INDEX_MAX_TEMP);
-                    double low = cursor.getDouble(INDEX_MIN_TEMP);
-                    String desc = cursor.getString(INDEX_SHORT_DESC);
+        if (cursor.moveToFirst()) {
+            int weatherId = cursor.getInt(INDEX_WEATHER_ID);
+            double high = cursor.getDouble(INDEX_MAX_TEMP);
+            double low = cursor.getDouble(INDEX_MIN_TEMP);
+            String desc = cursor.getString(INDEX_SHORT_DESC);
 
-                    if (displayNotifications) {
+            int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
+            Resources resources = context.getResources();
+            int artResourceId = Utility.getArtResourceForWeatherCondition(weatherId);
+            String artUrl = Utility.getArtUrlForWeatherCondition(context, weatherId);
 
-                        String lastNotificationKey = context.getString(R.string.pref_last_notification);
-                        long lastSync = prefs.getLong(lastNotificationKey, 0);
+            if (mGoogleApiClient.isConnected()) {
 
-                        if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
+                Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), iconId);
+                Asset asset = createAssetFromBitMap(bitmap);
 
+                PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH);
+                putDataMapRequest.getDataMap().putInt(WEATHER, weatherId);
+                putDataMapRequest.getDataMap().putDouble(HIGH_TEMP, high);
+                putDataMapRequest.getDataMap().putDouble(LOW_TEMP, low);
+                putDataMapRequest.getDataMap().putString(DESC, desc);
+                putDataMapRequest.getDataMap().putAsset(ICON, asset);
 
+                PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
+                PendingResult<DataApi.DataItemResult> pendingResult =
+                        Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
 
+                pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
+                    @Override
+                    public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
+                        if (!dataItemResult.getStatus().isSuccess()) {
+                            Log.d(TAG, "Data item set: " + dataItemResult.getDataItem().getUri());
 
-                            int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
-                    Resources resources = context.getResources();
-                    int artResourceId = Utility.getArtResourceForWeatherCondition(weatherId);
-                    String artUrl = Utility.getArtUrlForWeatherCondition(context, weatherId);
+                        } else {
+                        }
+                    }
 
-                    if (mGoogleApiClient.isConnected()) {
+                });
 
+                if (displayNotifications) {
 
-                        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), iconId);
-                        Asset asset = createAssetFromBitMap(bitmap);
+                    String lastNotificationKey = context.getString(R.string.pref_last_notification);
+                    long lastSync = prefs.getLong(lastNotificationKey, 0);
 
-                        PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH);
-                        putDataMapRequest.getDataMap().putInt(WEATHER, weatherId);
-                        putDataMapRequest.getDataMap().putDouble(HIGH_TEMP, high);
-                        putDataMapRequest.getDataMap().putDouble(LOW_TEMP, low);
-                        putDataMapRequest.getDataMap().putString(DESC, desc);
-                        putDataMapRequest.getDataMap().putAsset(ICON, asset);
-
-                        PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-                        PendingResult<DataApi.DataItemResult> pendingResult =
-                                Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
-
-                        pendingResult.setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
-                            @Override
-                            public void onResult(@NonNull DataApi.DataItemResult dataItemResult) {
-                                if (!dataItemResult.getStatus().isSuccess()) {
-                                    Log.d(TAG, "Data item set: " + dataItemResult.getDataItem().getUri());
-
-                                } else {
-                                }
-                            }
-
-                        });
-
+                    if (System.currentTimeMillis() - lastSync >= DAY_IN_MILLIS) {
 
                         @SuppressLint("InlinedApi")
                         int largeIconWidth = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
@@ -513,6 +508,7 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
             }
         }
     }
+
     private Asset createAssetFromBitMap(Bitmap bitmap) {
         final ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
