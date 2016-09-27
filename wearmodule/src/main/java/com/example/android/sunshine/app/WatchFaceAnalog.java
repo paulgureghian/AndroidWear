@@ -12,6 +12,7 @@ import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Icon;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
@@ -57,6 +58,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     private static final String LOG_TAG = "WatchFaceAnalog";
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
+    public String ICON = "icon";
+
 
     @Override
     public Engine onCreateEngine() {
@@ -117,8 +120,10 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                     if (item.getUri().getPath().compareTo("/location") == 0) {
 
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
-                        Asset profileAsset = dataMap.getAsset("profileImage");
+                        Asset profileAsset = dataMap.getAsset(ICON);
                         Bitmap bitmap = loadBitmapFromAsset(profileAsset);
+
+
                     }
                 }
             }
@@ -137,6 +142,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             }
             InputStream assetInputStream = Wearable.DataApi.getFdForAsset(
                     mGoogleApiClient, asset).await().getInputStream();
+
                     mGoogleApiClient.disconnect();
 
              if (assetInputStream == null) {
