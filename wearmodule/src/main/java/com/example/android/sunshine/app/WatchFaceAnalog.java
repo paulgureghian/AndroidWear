@@ -8,6 +8,7 @@ import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Path;
 import android.graphics.Rect;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -49,7 +50,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WatchFaceAnalog extends CanvasWatchFaceService {
 
-    private static final String TAG_1 = "onConnected";
+    public static final String TAG_1 = "onConnected";
     private static final String TAG_2 = "onConnectionSuspended";
     private static final String TAG_3 = "onConnectionFailed";
     private static final String TAG_4 = "onDataChanged";
@@ -108,22 +109,26 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
         public void onDataChanged(DataEventBuffer dataEvents) {
 
             for (DataEvent event : dataEvents) {
-                Log.d(LOG_TAG, "onDataChanged: " + dataEvents);
+                Log.d(TAG_4, "onDataChanged: " + dataEvents);
 
-                if (event.getType() == DataEvent.TYPE_CHANGED && event.getDataItem().getUri().getPath().equals("/image")) {
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    Asset profileAsset = dataMapItem.getDataMap().getAsset("profileImage");
-                    Bitmap bitmap = loadBitmapFromAsset(profileAsset);
+                if (event.getType() == DataEvent.TYPE_CHANGED) {
+
+                    DataItem item = event.getDataItem();
+                    if (item.getUri().getPath().compareTo("/location") == 0) {
+
+                        DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                        Asset profileAsset = dataMap.getAsset("profileImage");
+                        Bitmap bitmap = loadBitmapFromAsset(profileAsset);
+                    }
                 }
             }
         }
-
         public Bitmap loadBitmapFromAsset (Asset asset) {
             if (asset == null) {
                 throw new IllegalArgumentException("Asset must be non-null");
 
-
             }
+
             long TIMEOUT_MS = 1;
             ConnectionResult result =
                     mGoogleApiClient.blockingConnect(TIMEOUT_MS, TimeUnit.MILLISECONDS);
@@ -152,17 +157,17 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
         @Override
         public void onConnected(@Nullable Bundle bundle) {
             Wearable.DataApi.addListener(mGoogleApiClient, this);
-            Log.d(LOG_TAG, "onConnected: " + bundle);
+            Log.d(TAG_1, "onConnected: " + bundle);
         }
 
         @Override
         public void onConnectionSuspended(int i) {
-            Log.d(LOG_TAG, "onConnectionSuspended: " + i);
+            Log.d(TAG_2, "onConnectionSuspended: " + i);
         }
 
         @Override
         public void onConnectionFailed(@NonNull ConnectionResult result) {
-            Log.d(LOG_TAG, "onConnectionFailed: " + result);
+            Log.d(TAG_3, "onConnectionFailed: " + result);
         }
 
         @Override
