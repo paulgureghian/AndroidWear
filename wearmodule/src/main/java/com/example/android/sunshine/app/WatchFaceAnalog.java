@@ -51,6 +51,23 @@ import java.util.concurrent.TimeUnit;
 
 public class WatchFaceAnalog extends CanvasWatchFaceService {
 
+    public static final String PATH = "/location";
+    public String WEATHER = "weather";
+    public String HIGH_TEMP = "high_temp";
+    public String LOW_TEMP = "low_temp";
+    public String DESC = "desc";
+    public String ICON = "icon";
+    public String TIME = "time";
+    public final String TAG = "Data_item_set";
+
+
+
+    public int WeatherId;
+    public double High_Temp;
+    public double Low_Temp;
+    public String Desc;
+    public Bitmap bitmap;
+
     public static final String TAG_1 = "onConnected";
     private static final String TAG_2 = "onConnectionSuspended";
     private static final String TAG_3 = "onConnectionFailed";
@@ -58,7 +75,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     private static final String LOG_TAG = "WatchFaceAnalog";
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
-    public String ICON = "icon";
+
 
 
     @Override
@@ -111,6 +128,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
         @Override
         public void onDataChanged(DataEventBuffer dataEvents) {
 
+
             for (DataEvent event : dataEvents) {
                 Log.d(TAG_4, "onDataChanged: " + dataEvents);
 
@@ -120,6 +138,10 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                     if (item.getUri().getPath().compareTo("/location") == 0) {
 
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
+                        WeatherId = dataMap.getInt(WEATHER);
+
+
+
                         Asset profileAsset = dataMap.getAsset(ICON);
                         Bitmap bitmap = loadBitmapFromAsset(profileAsset);
 
@@ -142,23 +164,15 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             }
             InputStream assetInputStream = Wearable.DataApi.getFdForAsset(
                     mGoogleApiClient, asset).await().getInputStream();
-
                     mGoogleApiClient.disconnect();
 
              if (assetInputStream == null) {
                  String TAG = "Unknown asset";
                  Log.w(TAG, "Requested an unknown asset");
                  return null;
-
              }
                 return BitmapFactory.decodeStream(assetInputStream);
-
-
-
         }
-
-
-
 
         @Override
         public void onConnected(@Nullable Bundle bundle) {
@@ -192,10 +206,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             Resources resources = WatchFaceAnalog.this.getResources();
 
             mBackgroundPaint = new Paint();
-
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
             mHandPaint = new Paint();
-
             mHandPaint.setColor(resources.getColor(R.color.analog_hands));
             mHandPaint.setStrokeWidth(resources.getDimension(R.dimen.analog_hand_stroke));
             mHandPaint.setAntiAlias(true);
