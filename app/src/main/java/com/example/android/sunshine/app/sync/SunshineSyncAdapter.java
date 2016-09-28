@@ -425,9 +425,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
                 putDataMapRequest.getDataMap().putString(DESC, desc);
                 putDataMapRequest.getDataMap().putAsset(ICON, asset);
                 putDataMapRequest.getDataMap().putLong(TIME,System.currentTimeMillis());
-
                 PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest();
-                putDataRequest.setUrgent();
+
                 PendingResult<DataApi.DataItemResult> pendingResult =
                         Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest);
 
