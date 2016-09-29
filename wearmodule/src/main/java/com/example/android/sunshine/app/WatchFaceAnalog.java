@@ -60,8 +60,6 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     public String TIME = "time";
     public final String TAG = "Data_item_set";
 
-
-
     public int WeatherId;
     public double High_Temp;
     public double Low_Temp;
@@ -75,8 +73,6 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     private static final String LOG_TAG = "WatchFaceAnalog";
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
     private static final int MSG_UPDATE_TIME = 0;
-
-
 
     @Override
     public Engine onCreateEngine() {
@@ -128,7 +124,6 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
         @Override
         public void onDataChanged(DataEventBuffer dataEvents) {
 
-
             for (DataEvent event : dataEvents) {
                 Log.d(TAG_4, "onDataChanged: " + dataEvents);
 
@@ -139,13 +134,11 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);
-
-
-
+                        High_Temp = dataMap.getDouble(HIGH_TEMP);
+                        Low_Temp = dataMap.getDouble(LOW_TEMP);
+                        Desc = dataMap.getString(DESC);
                         Asset profileAsset = dataMap.getAsset(ICON);
                         Bitmap bitmap = loadBitmapFromAsset(profileAsset);
-
-
                     }
                 }
             }
