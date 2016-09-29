@@ -49,6 +49,8 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static com.example.android.sunshine.app.R.id.text;
+
 public class WatchFaceAnalog extends CanvasWatchFaceService {
 
     public static final String PATH = "/location";
@@ -138,7 +140,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                         Low_Temp = dataMap.getDouble(LOW_TEMP);
                         Desc = dataMap.getString(DESC);
                         Asset profileAsset = dataMap.getAsset(ICON);
-                        Bitmap bitmap = loadBitmapFromAsset(profileAsset);
+                        bitmap = loadBitmapFromAsset(profileAsset);
                     }
                 }
             }
@@ -301,6 +303,19 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             float hrX = (float) Math.sin(hrRot) * hrLength;
             float hrY = (float) -Math.cos(hrRot) * hrLength;
             canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHandPaint);
+
+            String.valueOf(WeatherId);
+
+            int width = bounds.width();
+            int height = bounds.height();
+
+            float x = width / 2f;
+            float y = height / 2f;
+            Paint paint = new Paint();
+
+            canvas.drawText(String.valueOf(WeatherId),  x,  y,  paint);
+
+
         }
 
         @Override
