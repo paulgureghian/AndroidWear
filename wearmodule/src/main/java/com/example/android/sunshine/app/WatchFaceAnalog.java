@@ -312,14 +312,16 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             int width = bounds.width();
             int height = bounds.height();
 
-            float x = width / 4f;
+            float x = width /  4f;
             float y = height / 4f;
             Paint paint = new Paint();
 
+
+
             canvas.drawText(String.valueOf(High_Temp), x, y, paint);
 
-            float a = width / 1f;
-            float b = height / 1f;
+            float a = width /  3f;
+            float b = height / 4f;
 
 
 
