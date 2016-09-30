@@ -145,7 +145,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                 }
             }
         }
-        public Bitmap loadBitmapFromAsset (Asset asset) {
+
+        public Bitmap loadBitmapFromAsset(Asset asset) {
             if (asset == null) {
                 throw new IllegalArgumentException("Asset must be non-null");
 
@@ -159,14 +160,14 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             }
             InputStream assetInputStream = Wearable.DataApi.getFdForAsset(
                     mGoogleApiClient, asset).await().getInputStream();
-                    mGoogleApiClient.disconnect();
+            mGoogleApiClient.disconnect();
 
-             if (assetInputStream == null) {
-                 String TAG = "Unknown asset";
-                 Log.w(TAG, "Requested an unknown asset");
-                 return null;
-             }
-                return BitmapFactory.decodeStream(assetInputStream);
+            if (assetInputStream == null) {
+                String TAG = "Unknown asset";
+                Log.w(TAG, "Requested an unknown asset");
+                return null;
+            }
+            return BitmapFactory.decodeStream(assetInputStream);
         }
 
         @Override
@@ -305,18 +306,24 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHandPaint);
 
 
-
             String.valueOf(High_Temp);
             String.valueOf(Low_Temp);
 
             int width = bounds.width();
             int height = bounds.height();
 
-            float x = width / 2f;
-            float y = height / 2f;
+            float x = width / 4f;
+            float y = height / 4f;
             Paint paint = new Paint();
 
-            canvas.drawText(String.valueOf(High_Temp),  x,  y,  paint);
+            canvas.drawText(String.valueOf(High_Temp), x, y, paint);
+
+            float a = width / 1f;
+            float b = height / 1f;
+
+
+
+            canvas.drawText(String.valueOf(Low_Temp), a, b, paint);
 
 
         }
