@@ -304,9 +304,10 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             float hrY = (float) -Math.cos(hrRot) * hrLength;
             canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHandPaint);
 
-            String.valueOf(WeatherId);
 
-            String.valueOf(High_Temp + " / " + Low_Temp);
+
+            String.valueOf(High_Temp);
+            String.valueOf(Low_Temp);
 
             int width = bounds.width();
             int height = bounds.height();
@@ -315,8 +316,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             float y = height / 2f;
             Paint paint = new Paint();
 
-            canvas.drawText(String.valueOf(WeatherId + High_Temp + Low_Temp),  x,  y,  paint);
-           // canvas.drawText(String.valueOf(High_Temp) + (Low_Temp));
+            canvas.drawText(String.valueOf(High_Temp),  x,  y,  paint);
+
 
         }
 
