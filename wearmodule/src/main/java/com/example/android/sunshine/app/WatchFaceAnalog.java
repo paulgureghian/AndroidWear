@@ -305,38 +305,45 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             float hrY = (float) -Math.cos(hrRot) * hrLength;
             canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHandPaint);
 
-
             String.valueOf(High_Temp);
             String.valueOf(Low_Temp);
-
+            Paint paint = new Paint();
 
             int width = bounds.width();
             int height = bounds.height();
 
             float x = width /  1.5f;
             float y = height / 5f;
-            Paint paint = new Paint();
 
-            canvas.drawText(String.valueOf(High_Temp), x, y, paint);
+            Paint highTemp = new Paint();
+            highTemp.setTextSize(15);
+            highTemp.setAntiAlias(true);
+            canvas.drawText(String.valueOf(High_Temp), x, y, highTemp);
 
             float a = width /  1.5f;
             float b = height / 4f;
 
-            canvas.drawText(String.valueOf(Low_Temp), a, b, paint);
+            Paint lowTemp = new Paint();
+            lowTemp.setTextSize(15);
+            lowTemp.setAntiAlias(true);
+
+            canvas.drawText(String.valueOf(Low_Temp), a, b, lowTemp);
 
             float c = width / 4f;
             float d = height / 4f;
 
-            canvas.drawText(Desc, c, d, paint);
+            Paint descPaint = new Paint();
+            descPaint.setTextSize(15);
+            descPaint.setAntiAlias(true);
 
-            float e = width / 4f;
-            float f = height /10f;
+            canvas.drawText(Desc, c, d, descPaint);
+
+            float e = width / 5f;
+            float f = height /14f;
 
             if (bitmap != null) {
                 canvas.drawBitmap(bitmap, e, f, paint);
             }
-
-
         }
 
         @Override
