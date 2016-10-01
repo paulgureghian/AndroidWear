@@ -65,7 +65,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     public int WeatherId;
     public double High_Temp;
     public double Low_Temp;
-    public String Desc;
+    public String Desc = "";
     public Bitmap bitmap;
 
     public static final String TAG_1 = "onConnected";
@@ -308,7 +308,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
             String.valueOf(High_Temp);
             String.valueOf(Low_Temp);
-            String DESC = Desc;
+
 
             int width = bounds.width();
             int height = bounds.height();
@@ -324,15 +324,17 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
             canvas.drawText(String.valueOf(Low_Temp), a, b, paint);
 
-            float c = width / 2f;
-            float d = height / 2f;
+            float c = width / 4f;
+            float d = height / 4f;
 
-            canvas.drawText(DESC, c, d, paint);
+            canvas.drawText(Desc, c, d, paint);
 
+            float e = width / 4f;
+            float f = height /10f;
 
-
-
-
+            if (bitmap != null) {
+                canvas.drawBitmap(bitmap, e, f, paint);
+            }
 
 
         }
