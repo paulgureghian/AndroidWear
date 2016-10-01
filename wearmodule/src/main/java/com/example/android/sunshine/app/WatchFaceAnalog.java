@@ -160,7 +160,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             }
             InputStream assetInputStream = Wearable.DataApi.getFdForAsset(
                     mGoogleApiClient, asset).await().getInputStream();
-            mGoogleApiClient.disconnect();
+        //    mGoogleApiClient.disconnect();
 
             if (assetInputStream == null) {
                 String TAG = "Unknown asset";
@@ -308,24 +308,31 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
             String.valueOf(High_Temp);
             String.valueOf(Low_Temp);
+            String DESC = Desc;
 
             int width = bounds.width();
             int height = bounds.height();
 
-            float x = width /  4f;
-            float y = height / 4f;
+            float x = width /  1.5f;
+            float y = height / 5f;
             Paint paint = new Paint();
-
-
 
             canvas.drawText(String.valueOf(High_Temp), x, y, paint);
 
-            float a = width /  3f;
+            float a = width /  1.5f;
             float b = height / 4f;
 
-
-
             canvas.drawText(String.valueOf(Low_Temp), a, b, paint);
+
+            float c = width / 2f;
+            float d = height / 2f;
+
+            canvas.drawText(DESC, c, d, paint);
+
+
+
+
+
 
 
         }
