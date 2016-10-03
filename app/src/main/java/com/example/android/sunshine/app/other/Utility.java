@@ -1,5 +1,6 @@
 package com.example.android.sunshine.app.other;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -70,6 +71,7 @@ public class Utility {
 
     public static final String DATE_FORMAT = "yyyyMMdd";
 
+    @SuppressLint("StringFormatMatches")
     public static String getFriendlyDayString(Context context, long dateInMillis, boolean displayLongToday) {
 
         Time time = new Time();
@@ -95,6 +97,7 @@ public class Utility {
         }
     }
 
+    @SuppressLint("StringFormatMatches")
     public static String getFullFriendlyDayString(Context context, long dateInMillis) {
 
         String day = getDayName(context, dateInMillis);
@@ -257,6 +260,7 @@ public class Utility {
         return -1;
     }
 
+    @SuppressLint("StringFormatMatches")
     public static String getStringForWeatherCondition(Context context, int weatherId) {
 
         int stringId;

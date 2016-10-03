@@ -72,6 +72,7 @@ import java.util.concurrent.ExecutionException;
 
 public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements DataApi.DataListener,
         GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+
     private GoogleApiClient mGoogleApiClient;
     private static final String LOG_TAG1 = "SunshineSyncAdapter";
 
@@ -408,6 +409,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
             double low = cursor.getDouble(INDEX_MIN_TEMP);
             String desc = cursor.getString(INDEX_SHORT_DESC);
 
+            String hightemp = Utility.formatTemperature(context, high);
+            String lowtemp = Utility.formatTemperature(context, low);
+
             int iconId = Utility.getIconResourceForWeatherCondition(weatherId);
             Resources resources = context.getResources();
             int artResourceId = Utility.getArtResourceForWeatherCondition(weatherId);
@@ -420,8 +424,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter implements 
 
                 PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(PATH);
                 putDataMapRequest.getDataMap().putInt(WEATHER, weatherId);
-                putDataMapRequest.getDataMap().putDouble(HIGH_TEMP, high);
-                putDataMapRequest.getDataMap().putDouble(LOW_TEMP, low);
+                putDataMapRequest.getDataMap().putString(HIGH_TEMP, hightemp);
+                putDataMapRequest.getDataMap().putString(LOW_TEMP, lowtemp);
                 putDataMapRequest.getDataMap().putString(DESC, desc);
                 putDataMapRequest.getDataMap().putAsset(ICON, asset);
                 putDataMapRequest.getDataMap().putLong(TIME,System.currentTimeMillis());
