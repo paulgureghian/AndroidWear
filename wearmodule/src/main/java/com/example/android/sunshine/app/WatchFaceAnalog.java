@@ -49,6 +49,7 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.x;
 import static com.example.android.sunshine.app.R.id.text;
 
 public class WatchFaceAnalog extends CanvasWatchFaceService {
@@ -137,6 +138,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);
                         High_Temp = dataMap.getDouble(HIGH_TEMP);
+
                         Low_Temp = dataMap.getDouble(LOW_TEMP);
                         Desc = dataMap.getString(DESC);
                         Asset profileAsset = dataMap.getAsset(ICON);
@@ -318,7 +320,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             Paint highTemp = new Paint();
             highTemp.setTextSize(15);
             highTemp.setAntiAlias(true);
-            canvas.drawText(String.valueOf(High_Temp), x, y, highTemp);
+            canvas.drawText(String.valueOf((int)High_Temp), x, y, highTemp);
 
             float a = width /  1.5f;
             float b = height / 4f;
@@ -327,7 +329,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             lowTemp.setTextSize(15);
             lowTemp.setAntiAlias(true);
 
-            canvas.drawText(String.valueOf(Low_Temp), a, b, lowTemp);
+            canvas.drawText(String.valueOf((int)Low_Temp), a, b, lowTemp);
 
             float c = width / 4f;
             float d = height / 4f;
