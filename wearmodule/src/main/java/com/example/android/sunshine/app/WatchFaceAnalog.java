@@ -64,8 +64,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     public final String TAG = "Data_item_set";
 
     public int WeatherId;
-    public double High_Temp;
-    public double Low_Temp;
+    public String High_Temp;
+    public String Low_Temp;
     public String Desc = "";
     public Bitmap bitmap;
 
@@ -137,9 +137,9 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);
-                        High_Temp = dataMap.getDouble(HIGH_TEMP);
+                        High_Temp = dataMap.getString(HIGH_TEMP);
 
-                        Low_Temp = dataMap.getDouble(LOW_TEMP);
+                        Low_Temp = dataMap.getString(LOW_TEMP);
                         Desc = dataMap.getString(DESC);
                         Asset profileAsset = dataMap.getAsset(ICON);
                         bitmap = loadBitmapFromAsset(profileAsset);
@@ -320,7 +320,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             Paint highTemp = new Paint();
             highTemp.setTextSize(15);
             highTemp.setAntiAlias(true);
-            canvas.drawText(String.valueOf((int)High_Temp), x, y, highTemp);
+            canvas.drawText(String.valueOf(High_Temp), x, y, highTemp);
 
             float a = width /  1.5f;
             float b = height / 4f;
@@ -329,7 +329,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             lowTemp.setTextSize(15);
             lowTemp.setAntiAlias(true);
 
-            canvas.drawText(String.valueOf((int)Low_Temp), a, b, lowTemp);
+            canvas.drawText(String.valueOf(Low_Temp), a, b, lowTemp);
 
             float c = width / 4f;
             float d = height / 4f;
