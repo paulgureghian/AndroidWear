@@ -56,12 +56,12 @@ public class Utility {
 
     public static String formatTemperature(Context context, double temperature) {
 
-        String suffix = "\u00B0";
+        String suffix = "\u00B0%2s";
         if (!isMetric(context)) {
             temperature = (temperature * 1.8) + 32;
         }
 
-        return String.format(context.getString(R.string.format_temperature), temperature);
+        return String.format(context.getString(R.string.format_temperature), temperature, "C");
     }
 
     static String formatDate(long dateInMilliseconds) {

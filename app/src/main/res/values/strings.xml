@@ -95,7 +95,9 @@
 
     <!-- Strings for formatting weather-related data -->
     <!-- Temperature format [CHAR LIMIT=5 -->
-    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0</string>
+    <string name="format_temperature"><xliff:g id="temp">%1.0f</xliff:g>\u00B0%2s</string>
+
+
 
     <string name="wind">Wind</string>
     <!-- Windspeed formats -->
