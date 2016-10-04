@@ -64,8 +64,8 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     public final String TAG = "Data_item_set";
 
     public int WeatherId;
-    public String High_Temp;
-    public String Low_Temp;
+    public String High_Temp ="";
+    public String Low_Temp = "";
     public String Desc = "";
     public Bitmap bitmap;
 
@@ -307,8 +307,6 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             float hrY = (float) -Math.cos(hrRot) * hrLength;
             canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHandPaint);
 
-            String.valueOf(High_Temp);
-            String.valueOf(Low_Temp);
             Paint paint = new Paint();
 
             int width = bounds.width();
@@ -320,7 +318,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             Paint highTemp = new Paint();
             highTemp.setTextSize(15);
             highTemp.setAntiAlias(true);
-            canvas.drawText(String.valueOf(High_Temp), x, y, highTemp);
+            canvas.drawText((High_Temp), x, y, highTemp);
 
             float a = width /  1.5f;
             float b = height / 4f;
@@ -328,8 +326,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             Paint lowTemp = new Paint();
             lowTemp.setTextSize(15);
             lowTemp.setAntiAlias(true);
-
-            canvas.drawText(String.valueOf(Low_Temp), a, b, lowTemp);
+            canvas.drawText((Low_Temp), a, b, lowTemp);
 
             float c = width / 4f;
             float d = height / 4f;
