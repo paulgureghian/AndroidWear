@@ -159,6 +159,7 @@
         </service>
         <service
             android:name=".gcm.RegistrationIntentService"
+            android:enabled="false"
             android:exported="false" />
         <service
             android:name=".other.WearableListener"
