@@ -18,8 +18,8 @@ import java.util.Locale;
 
 public class Utility {
 
-    public String C = "c";
-    public String F = "f";
+    public static String C = "C";
+    public static String F = "F";
 
     public static float DEFAULT_LATLONG = 0F;
 
@@ -59,22 +59,16 @@ public class Utility {
 
     public static String formatTemperature(Context context, double temperature) {
 
-
         String suffix = "\u00B0";
         if (!isMetric(context)) {
             temperature = (temperature * 1.8) + 32;
 
             return String.format(context.getString(R.string.format_temperature), temperature, F);
 
-        } else if (isMetric(context)) {
-
-
-            return String.format(context.getString(R.string.format_temperature), temperature,  C);
         }
 
-    }
-
-
+            return String.format(context.getString(R.string.format_temperature), temperature, C);
+        }
 
     static String formatDate(long dateInMilliseconds) {
         Date date = new Date(dateInMilliseconds);
