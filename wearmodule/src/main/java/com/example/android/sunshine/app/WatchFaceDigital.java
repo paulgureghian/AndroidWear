@@ -45,14 +45,11 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-
 public class WatchFaceDigital extends CanvasWatchFaceService {
     private static final Typeface NORMAL_TYPEFACE =
             Typeface.create(Typeface.SANS_SERIF, Typeface.NORMAL);
 
-
     private static final long INTERACTIVE_UPDATE_RATE_MS = TimeUnit.SECONDS.toMillis(1);
-
 
     private static final int MSG_UPDATE_TIME = 0;
 
@@ -99,7 +96,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
 
         float mXOffset;
         float mYOffset;
-
 
         boolean mLowBitAmbient;
 
@@ -153,7 +149,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 unregisterReceiver();
             }
 
-
             updateTimer();
         }
 
@@ -177,7 +172,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         @Override
         public void onApplyWindowInsets(WindowInsets insets) {
             super.onApplyWindowInsets(insets);
-
 
             Resources resources = WatchFaceDigital.this.getResources();
             boolean isRound = insets.isRound();
@@ -216,7 +210,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             updateTimer();
         }
 
-
         @Override
         public void onTapCommand(int tapType, int x, int y, long eventTime) {
             Resources resources = WatchFaceDigital.this.getResources();
@@ -254,7 +247,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
         }
 
-
         private void updateTimer() {
             mUpdateTimeHandler.removeMessages(MSG_UPDATE_TIME);
             if (shouldTimerBeRunning()) {
@@ -262,11 +254,9 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             }
         }
 
-
         private boolean shouldTimerBeRunning() {
             return isVisible() && !isInAmbientMode();
         }
-
 
         private void handleUpdateTimeMessage() {
             invalidate();

@@ -39,10 +39,16 @@
             android:name=".WatchFaceDigital"
             android:label="Digital"
             android:permission="android.permission.BIND_WALLPAPER">
-
             <meta-data
                 android:name="android.service.wallpaper"
                 android:resource="@xml/watch_face" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview"
+                android:resource="@drawable/preview_digital" />
+            <meta-data
+                android:name="com.google.android.wearable.watchface.preview_circular"
+                android:resource="@drawable/preview_digital" />
+
             <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version" />
