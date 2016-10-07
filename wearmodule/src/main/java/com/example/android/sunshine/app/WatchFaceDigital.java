@@ -386,7 +386,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 lowTemp.setAntiAlias(true);
                 canvas.drawText((Low_Temp), a, b, lowTemp);
 
-                float c = width / 4f;
+                float c = width / 5f;
                 float d = height / 4f;
 
                 Paint descPaint = new Paint();
@@ -394,12 +394,20 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 descPaint.setAntiAlias(true);
 
                 canvas.drawText(Desc, c, d, descPaint);
+                Log.d(Desc, "Receiving description");
 
                 float e = width / 5f;
                 float f = height /14f;
 
+
+
                 if (bitmap != null) {
-                    canvas.drawBitmap(bitmap, e, f, paint);
+
+                    int height1 = 40;
+                    int width1 = 40;
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
+
+                    canvas.drawBitmap(scaledBitmap, e, f, paint);
                 }
             }
 

@@ -329,13 +329,16 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             canvas.drawText((Low_Temp), a, b, lowTemp);
 
             float c = width / 4f;
-            float d = height / 4f;
+            float d = height / 3f;
 
             Paint descPaint = new Paint();
             descPaint.setTextSize(15);
             descPaint.setAntiAlias(true);
 
             canvas.drawText(Desc, c, d, descPaint);
+             Log.d(Desc,"Receiving Description");
+
+
 
             float e = width / 5f;
             float f = height /14f;
