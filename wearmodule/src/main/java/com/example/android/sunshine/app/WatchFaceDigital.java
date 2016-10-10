@@ -62,6 +62,7 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.width;
 import static android.R.attr.x;
 import static android.R.attr.y;
 
@@ -238,8 +239,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                     .addOnConnectionFailedListener(WatchFaceDigital.Engine.this)
                     .build();
             mGoogleApiClient.connect();
-
-
         }
 
         @Override
@@ -305,8 +304,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                     ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
 
             mTextPaint.setTextSize(textSize);
-
-
         }
 
         @Override
@@ -331,7 +328,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 }
                 invalidate();
             }
-
 
             updateTimer();
         }
@@ -359,71 +355,51 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
 
-            int width;
-            int height;
-            float x;
-            float y;
-            float a;
-            float b;
-            float c;
-            float d;
-            float e;
-            float f;
-
-
             if (isInAmbientMode()) {
                 canvas.drawColor(Color.BLACK);
 
-                if (mIsRound) {
+            } else {
+                canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
 
-                     width = bounds.width();
-                     height = bounds.height();
+                int width = bounds.width();
+                int height = bounds.height();
 
-                     x = width / 1.7f;
-                     y = height / 5.1f;
+                float x = width / 1.7f;
+                float y = height / 5.1f;
+                float a = width / 1.7f;
+                float b = height / 4.5f;
+                float c = width / 2.9f;
+                float d = height / 4.5f;
+                float e = width / 2.9f;
+                float f = height / 8f;
 
-                     a = width / 1.7f;
-                     b = height / 4.5f;
+                Paint paint = new Paint();
 
-                     c = width / 2.9f;
-                     d = height / 4.5f;
+                Paint highTemp = new Paint();
+                highTemp.setTextSize(15);
+                highTemp.setAntiAlias(true);
+                canvas.drawText((High_Temp), x, y, highTemp);
 
-                     e = width / 2.9f;
-                     f = height / 8f;
+                Paint lowTemp = new Paint();
+                lowTemp.setTextSize(15);
+                lowTemp.setAntiAlias(true);
+                canvas.drawText((Low_Temp), a, b, lowTemp);
 
-                } else {
-                    canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
+                Paint descPaint = new Paint();
+                descPaint.setTextSize(15);
+                descPaint.setAntiAlias(true);
 
-                    Paint paint = new Paint();
+                canvas.drawText(Desc, c, d, descPaint);
+                Log.d(Desc, "Receiving description");
 
-                    Paint highTemp = new Paint();
-                    highTemp.setTextSize(15);
-                    highTemp.setAntiAlias(true);
-                    canvas.drawText((High_Temp), x, y, highTemp);
+                if (bitmap != null) {
 
-                    Paint lowTemp = new Paint();
-                    lowTemp.setTextSize(15);
-                    lowTemp.setAntiAlias(true);
-                    canvas.drawText((Low_Temp), a, b, lowTemp);
+                    int height1 = 40;
+                    int width1 = 40;
+                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
 
-                    Paint descPaint = new Paint();
-                    descPaint.setTextSize(15);
-                    descPaint.setAntiAlias(true);
-
-                    canvas.drawText(Desc, c, d, descPaint);
-                    Log.d(Desc, "Receiving description");
-
-                    if (bitmap != null) {
-
-                        int height1 = 40;
-                        int width1 = 40;
-                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
-
-                        canvas.drawBitmap(scaledBitmap, e, f, paint);
-                    }
+                    canvas.drawBitmap(scaledBitmap, e, f, paint);
                 }
-
-
             }
         }
 
