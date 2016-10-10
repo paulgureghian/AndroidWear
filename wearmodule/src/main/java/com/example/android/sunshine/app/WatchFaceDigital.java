@@ -399,6 +399,15 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
 
                     canvas.drawBitmap(scaledBitmap, e, f, paint);
+
+               mTime.setToNow();
+                    String text = mAmbient
+                            ? String.format("%d:%02d", mTime.hour, mTime.minute)
+                            : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
+                    canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
+
+
+
                 }
             }
         }
