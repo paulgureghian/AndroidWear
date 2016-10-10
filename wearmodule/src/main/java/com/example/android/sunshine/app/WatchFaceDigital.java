@@ -62,6 +62,9 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.x;
+import static android.R.attr.y;
+
 public class WatchFaceDigital extends CanvasWatchFaceService {
 
     public static final String PATH = "/location";
@@ -74,7 +77,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
     public final String TAG = "Data_item_set";
 
     public int WeatherId;
-    public String High_Temp ="";
+    public String High_Temp = "";
     public String Low_Temp = "";
     public String Desc = "";
     public Bitmap bitmap;
@@ -116,7 +119,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
     }
 
     private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
+            GoogleApiClient.OnConnectionFailedListener {
 
         boolean mIsRound;
         int mChinSize;
@@ -208,12 +211,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         }
 
 
-
-
-
-
-
-
         @Override
         public void onCreate(SurfaceHolder holder) {
             super.onCreate(holder);
@@ -241,8 +238,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                     .addOnConnectionFailedListener(WatchFaceDigital.Engine.this)
                     .build();
             mGoogleApiClient.connect();
-
-
 
 
         }
@@ -311,10 +306,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
 
             mTextPaint.setTextSize(textSize);
 
-           // if ()
-
-
-
 
         }
 
@@ -368,75 +359,72 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         @Override
         public void onDraw(Canvas canvas, Rect bounds) {
 
+            int width;
+            int height;
+            float x;
+            float y;
+            float a;
+            float b;
+            float c;
+            float d;
+            float e;
+            float f;
+
+
             if (isInAmbientMode()) {
                 canvas.drawColor(Color.BLACK);
 
+                if (mIsRound) {
 
+                     width = bounds.width();
+                     height = bounds.height();
 
-            } else {
-                canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
+                     x = width / 1.7f;
+                     y = height / 5.1f;
 
-                Paint paint = new Paint();
+                     a = width / 1.7f;
+                     b = height / 4.5f;
 
-                int width = bounds.width();
-                int height = bounds.height();
+                     c = width / 2.9f;
+                     d = height / 4.5f;
 
-                float x = width /  1.5f;
-                float y = height / 5f;
+                     e = width / 2.9f;
+                     f = height / 8f;
 
-                Paint highTemp = new Paint();
-                highTemp.setTextSize(15);
-                highTemp.setAntiAlias(true);
-                canvas.drawText((High_Temp), x, y, highTemp);
+                } else {
+                    canvas.drawRect(0, 0, bounds.width(), bounds.height(), mBackgroundPaint);
 
-                float a = width /  1.5f;
-                float b = height / 4f;
+                    Paint paint = new Paint();
 
-                Paint lowTemp = new Paint();
-                lowTemp.setTextSize(15);
-                lowTemp.setAntiAlias(true);
-                canvas.drawText((Low_Temp), a, b, lowTemp);
+                    Paint highTemp = new Paint();
+                    highTemp.setTextSize(15);
+                    highTemp.setAntiAlias(true);
+                    canvas.drawText((High_Temp), x, y, highTemp);
 
-                float c = width / 5f;
-                float d = height / 4f;
+                    Paint lowTemp = new Paint();
+                    lowTemp.setTextSize(15);
+                    lowTemp.setAntiAlias(true);
+                    canvas.drawText((Low_Temp), a, b, lowTemp);
 
-                Paint descPaint = new Paint();
-                descPaint.setTextSize(15);
-                descPaint.setAntiAlias(true);
+                    Paint descPaint = new Paint();
+                    descPaint.setTextSize(15);
+                    descPaint.setAntiAlias(true);
 
-                canvas.drawText(Desc, c, d, descPaint);
-                Log.d(Desc, "Receiving description");
+                    canvas.drawText(Desc, c, d, descPaint);
+                    Log.d(Desc, "Receiving description");
 
-                float e = width / 5f;
-                float f = height / 15f;
+                    if (bitmap != null) {
 
+                        int height1 = 40;
+                        int width1 = 40;
+                        Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
 
-
-                if (bitmap != null) {
-
-                    int height1 = 40;
-                    int width1 = 40;
-                    Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
-
-                    canvas.drawBitmap(scaledBitmap, e, f, paint);
+                        canvas.drawBitmap(scaledBitmap, e, f, paint);
+                    }
                 }
+
+
             }
-
-
-
-
-
-
-
-
-
-
-
-            mTime.setToNow();
-            String text = mAmbient
-                    ? String.format("%d:%02d", mTime.hour, mTime.minute)
-                    : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-            canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
         }
 
         private void updateTimer() {
