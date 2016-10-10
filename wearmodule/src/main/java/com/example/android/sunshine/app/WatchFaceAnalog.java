@@ -329,7 +329,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             canvas.drawText((Low_Temp), a, b, lowTemp);
 
             float c = width / 4f;
-            float d = height / 3f;
+            float d = height / 4f;
 
             Paint descPaint = new Paint();
             descPaint.setTextSize(15);
@@ -340,11 +340,19 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
 
 
-            float e = width / 5f;
+            float e = width / 4f;
             float f = height /14f;
 
             if (bitmap != null) {
-                canvas.drawBitmap(bitmap, e, f, paint);
+
+                int height1 = 40;
+                int width1 = 40;
+                Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
+
+
+
+
+                canvas.drawBitmap(scaledBitmap, e, f, paint);
             }
         }
 

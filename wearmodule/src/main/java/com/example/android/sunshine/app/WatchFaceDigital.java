@@ -118,6 +118,8 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
     private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener {
 
+        boolean mIsRound;
+        int mChinSize;
 
         GoogleApiClient mGoogleApiClient;
 
@@ -297,14 +299,23 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         public void onApplyWindowInsets(WindowInsets insets) {
             super.onApplyWindowInsets(insets);
 
+            mIsRound = insets.isRound();
+            mChinSize = insets.getSystemWindowInsetBottom();
+
             Resources resources = WatchFaceDigital.this.getResources();
-            boolean isRound = insets.isRound();
-            mXOffset = resources.getDimension(isRound
+
+            mXOffset = resources.getDimension(mIsRound
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
-            float textSize = resources.getDimension(isRound
+            float textSize = resources.getDimension(mIsRound
                     ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
 
             mTextPaint.setTextSize(textSize);
+
+           // if ()
+
+
+
+
         }
 
         @Override
@@ -397,7 +408,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 Log.d(Desc, "Receiving description");
 
                 float e = width / 5f;
-                float f = height /14f;
+                float f = height / 15f;
 
 
 
