@@ -341,7 +341,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
 
 
             float e = width / 4f;
-            float f = height /14f;
+            float f = height /10f;
 
             if (bitmap != null) {
 

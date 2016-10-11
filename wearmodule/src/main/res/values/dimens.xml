@@ -7,5 +7,10 @@
     <dimen name="digital_text_size_round">45dp</dimen>
     <dimen name="digital_text_size">40dp</dimen>
 
+    <dimen name="high_Temp">15sp</dimen>
+    <dimen name="low_Temp">15sp</dimen>
+    <dimen name="desc">15sp</dimen>
+    <dimen name="bitmapWidth">15dp</dimen>
+    <dimen name="bitmapHeight">15dp</dimen>
 
 </resources>

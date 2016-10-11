@@ -225,6 +225,10 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             Resources resources = WatchFaceDigital.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
+            Float  Ht = resources.getDimension(R.dimen.high_Temp);
+
+
+
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
 
@@ -365,18 +369,18 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 int height = bounds.height();
 
                 float x = width / 1.7f;
-                float y = height / 5.1f;
+                float y = height / 5.4f;
                 float a = width / 1.7f;
                 float b = height / 4.5f;
                 float c = width / 2.9f;
                 float d = height / 4.5f;
                 float e = width / 2.9f;
-                float f = height / 8f;
+                float f = height / 14f;
 
                 Paint paint = new Paint();
 
                 Paint highTemp = new Paint();
-                highTemp.setTextSize(15);
+                highTemp.setTextSize(Ht);
                 highTemp.setAntiAlias(true);
                 canvas.drawText((High_Temp), x, y, highTemp);
 
@@ -399,16 +403,13 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
 
                     canvas.drawBitmap(scaledBitmap, e, f, paint);
-
-               mTime.setToNow();
-                    String text = mAmbient
-                            ? String.format("%d:%02d", mTime.hour, mTime.minute)
-                            : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
-                    canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
-
-
-
                 }
+
+                mTime.setToNow();
+                String text = mAmbient
+                        ? String.format("%d:%02d", mTime.hour, mTime.minute)
+                        : String.format("%d:%02d:%02d", mTime.hour, mTime.minute, mTime.second);
+                canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
             }
         }
 
