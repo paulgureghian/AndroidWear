@@ -128,6 +128,8 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         float Ht;
         float Lt;
         float Description;
+        float IconW;
+        float IconH;
 
         GoogleApiClient mGoogleApiClient;
 
@@ -232,7 +234,8 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             Ht = resources.getDimension(R.dimen.high_Temp);
             Lt = resources.getDimension(R.dimen.low_Temp);
             Description = resources.getDimension(R.dimen.desc);
-
+            IconW = resources.getDimension(R.dimen.bitmapWidth);
+            IconH = resources.getDimension(R.dimen.bitmapHeight);
 
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
@@ -403,8 +406,9 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
 
                 if (bitmap != null) {
 
-                    int height1 = 40;
-                    int width1 = 40;
+                    int width1 = IconW;
+                    int height1 = IconH;
+
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
 
                     canvas.drawBitmap(scaledBitmap, e, f, paint);
