@@ -125,6 +125,10 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         boolean mIsRound;
         int mChinSize;
 
+        float Ht;
+        float Lt;
+        float Description;
+
         GoogleApiClient mGoogleApiClient;
 
         final Handler mUpdateTimeHandler = new EngineHandler(this);
@@ -225,8 +229,9 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             Resources resources = WatchFaceDigital.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
 
-            Float  Ht = resources.getDimension(R.dimen.high_Temp);
-
+            Ht = resources.getDimension(R.dimen.high_Temp);
+            Lt = resources.getDimension(R.dimen.low_Temp);
+            Description = resources.getDimension(R.dimen.desc);
 
 
             mBackgroundPaint = new Paint();
@@ -385,12 +390,12 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 canvas.drawText((High_Temp), x, y, highTemp);
 
                 Paint lowTemp = new Paint();
-                lowTemp.setTextSize(15);
+                lowTemp.setTextSize(Lt);
                 lowTemp.setAntiAlias(true);
                 canvas.drawText((Low_Temp), a, b, lowTemp);
 
                 Paint descPaint = new Paint();
-                descPaint.setTextSize(15);
+                descPaint.setTextSize(Description);
                 descPaint.setAntiAlias(true);
 
                 canvas.drawText(Desc, c, d, descPaint);
