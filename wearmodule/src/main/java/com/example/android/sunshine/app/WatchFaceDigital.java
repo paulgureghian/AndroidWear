@@ -62,6 +62,7 @@ import java.lang.ref.WeakReference;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
+import static android.R.attr.textSize;
 import static android.R.attr.width;
 import static android.R.attr.x;
 import static android.R.attr.y;
@@ -150,6 +151,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
 
         float mXOffset;
         float mYOffset;
+        float offsetY;
 
         boolean mLowBitAmbient;
 
@@ -228,6 +230,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                     .build());
             Resources resources = WatchFaceDigital.this.getResources();
             mYOffset = resources.getDimension(R.dimen.digital_y_offset);
+            offsetY = resources.getDimension(R.dimen.offset_y);
 
             Ht = resources.getDimension(R.dimen.high_Temp);
             Lt = resources.getDimension(R.dimen.low_Temp);
@@ -375,7 +378,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 int height = bounds.height();
 
                 float x = width / 1.7f;
-                float y = height / 5.4f;
+                float y = height / 5.8f;
                 float a = width / 1.7f;
                 float b = height / 4.5f;
                 float c = width / 2.9f;

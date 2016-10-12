@@ -7,6 +7,8 @@
     <dimen name="digital_text_size_round">45dp</dimen>
     <dimen name="digital_text_size">40dp</dimen>
 
+    <dimen name="offset_y">1dp</dimen>
+
     <dimen name="high_Temp">12sp</dimen>
     <dimen name="low_Temp">12sp</dimen>
     <dimen name="desc">12sp</dimen>
