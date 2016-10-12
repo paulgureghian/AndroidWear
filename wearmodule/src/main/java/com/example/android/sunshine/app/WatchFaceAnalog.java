@@ -105,6 +105,12 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
     private class Engine extends CanvasWatchFaceService.Engine implements DataApi.DataListener, GoogleApiClient.ConnectionCallbacks,
             GoogleApiClient.OnConnectionFailedListener {
 
+        float Ht;
+        float Lt;
+        float Description;
+        float IconW;
+        float IconH;
+
         private static final String COUNT_KEY = "com.example.key.count";
         final Handler mUpdateTimeHandler = new EngineHandler(this);
         GoogleApiClient mGoogleApiClient;
@@ -138,7 +144,6 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);
                         High_Temp = dataMap.getString(HIGH_TEMP);
-
                         Low_Temp = dataMap.getString(LOW_TEMP);
                         Desc = dataMap.getString(DESC);
                         Asset profileAsset = dataMap.getAsset(ICON);
@@ -202,6 +207,12 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             );
 
             Resources resources = WatchFaceAnalog.this.getResources();
+
+            Ht = resources.getDimension(R.dimen.high_Temp);
+            Lt = resources.getDimension(R.dimen.low_Temp);
+            Description = resources.getDimension(R.dimen.desc);
+            IconW = resources.getDimension(R.dimen.bitmapWidth);
+            IconH = resources.getDimension(R.dimen.bitmapHeight);
 
             mBackgroundPaint = new Paint();
             mBackgroundPaint.setColor(resources.getColor(R.color.background));
@@ -307,51 +318,42 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
             float hrY = (float) -Math.cos(hrRot) * hrLength;
             canvas.drawLine(centerX, centerY, centerX + hrX, centerY + hrY, mHandPaint);
 
-            Paint paint = new Paint();
-
             int width = bounds.width();
             int height = bounds.height();
 
             float x = width /  1.5f;
             float y = height / 5f;
+            float a = width /  1.5f;
+            float b = height / 4f;
+            float c = width / 4f;
+            float d = height / 4f;
+            float e = width / 3.8f;
+            float f = height / 10f;
+
+            Paint paint = new Paint();
 
             Paint highTemp = new Paint();
-            highTemp.setTextSize(15);
+            highTemp.setTextSize(Ht);
             highTemp.setAntiAlias(true);
             canvas.drawText((High_Temp), x, y, highTemp);
 
-            float a = width /  1.5f;
-            float b = height / 4f;
-
             Paint lowTemp = new Paint();
-            lowTemp.setTextSize(15);
+            lowTemp.setTextSize(Lt);
             lowTemp.setAntiAlias(true);
             canvas.drawText((Low_Temp), a, b, lowTemp);
 
-            float c = width / 4f;
-            float d = height / 4f;
-
             Paint descPaint = new Paint();
-            descPaint.setTextSize(15);
+            descPaint.setTextSize(Description);
             descPaint.setAntiAlias(true);
 
             canvas.drawText(Desc, c, d, descPaint);
              Log.d(Desc,"Receiving Description");
 
-
-
-            float e = width / 4f;
-            float f = height /10f;
-
             if (bitmap != null) {
 
-                int height1 = 40;
-                int width1 = 40;
+                int width1 = (int) IconW;
+                int height1 = (int) IconH;
                 Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
-
-
-
-
                 canvas.drawBitmap(scaledBitmap, e, f, paint);
             }
         }

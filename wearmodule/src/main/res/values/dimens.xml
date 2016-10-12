@@ -10,7 +10,7 @@
     <dimen name="high_Temp">12sp</dimen>
     <dimen name="low_Temp">12sp</dimen>
     <dimen name="desc">12sp</dimen>
-    <dimen name="bitmapWidth">15dp</dimen>
-    <dimen name="bitmapHeight">15dp</dimen>
+    <dimen name="bitmapWidth">20dp</dimen>
+    <dimen name="bitmapHeight">20dp</dimen>
 
 </resources>

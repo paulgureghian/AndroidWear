@@ -167,7 +167,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);
                         High_Temp = dataMap.getString(HIGH_TEMP);
-
                         Low_Temp = dataMap.getString(LOW_TEMP);
                         Desc = dataMap.getString(DESC);
                         Asset profileAsset = dataMap.getAsset(ICON);
@@ -216,7 +215,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         public void onConnectionFailed(@NonNull ConnectionResult result) {
             Log.d(TAG_3, "onConnectionFailed: " + result);
         }
-
 
         @Override
         public void onCreate(SurfaceHolder holder) {
@@ -382,7 +380,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 float b = height / 4.5f;
                 float c = width / 2.9f;
                 float d = height / 4.5f;
-                float e = width / 2.9f;
+                float e = width /  2.8f;
                 float f = height / 14f;
 
                 Paint paint = new Paint();
@@ -406,11 +404,9 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
 
                 if (bitmap != null) {
 
-                    int width1 = IconW;
-                    int height1 = IconH;
-
+                    int width1 = (int) IconW;
+                    int height1 = (int) IconH;
                     Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, width1, height1, true);
-
                     canvas.drawBitmap(scaledBitmap, e, f, paint);
                 }
 
