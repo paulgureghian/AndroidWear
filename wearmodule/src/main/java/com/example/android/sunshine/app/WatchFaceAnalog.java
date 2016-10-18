@@ -139,7 +139,7 @@ public class WatchFaceAnalog extends CanvasWatchFaceService {
                 if (event.getType() == DataEvent.TYPE_CHANGED) {
 
                     DataItem item = event.getDataItem();
-                    if (item.getUri().getPath().compareTo("/location") == 0) {
+                    if (item.getUri().getPath().compareTo(PATH) == 0) {
 
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);

@@ -164,14 +164,14 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 if (event.getType() == DataEvent.TYPE_CHANGED) {
 
                     DataItem item = event.getDataItem();
-                    if (item.getUri().getPath().compareTo("/location") == 0) {
+                    if (item.getUri().getPath().compareTo(PATH) == 0) {
 
                         DataMap dataMap = DataMapItem.fromDataItem(item).getDataMap();
                         WeatherId = dataMap.getInt(WEATHER);
                         High_Temp = dataMap.getString(HIGH_TEMP);
                         Low_Temp = dataMap.getString(LOW_TEMP);
                         Desc = dataMap.getString(DESC);
-                        Asset profileAsset = dataMap.getAsset(ICON);
+                        final Asset profileAsset = dataMap.getAsset(ICON);
                         bitmap = loadBitmapFromAsset(profileAsset);
                     }
                 }
@@ -181,7 +181,6 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
         public Bitmap loadBitmapFromAsset(Asset asset) {
             if (asset == null) {
                 throw new IllegalArgumentException("Asset must be non-null");
-
             }
 
             long TIMEOUT_MS = 1;
@@ -190,9 +189,9 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             if (!result.isSuccess()) {
                 return null;
             }
+
             InputStream assetInputStream = Wearable.DataApi.getFdForAsset(
                     mGoogleApiClient, asset).await().getInputStream();
-            //    mGoogleApiClient.disconnect();
 
             if (assetInputStream == null) {
                 String TAG = "Unknown asset";
@@ -275,13 +274,11 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
             if (visible) {
                 registerReceiver();
 
-
                 mTime.clear(TimeZone.getDefault().getID());
                 mTime.setToNow();
             } else {
                 unregisterReceiver();
             }
-
             updateTimer();
         }
 
@@ -383,7 +380,7 @@ public class WatchFaceDigital extends CanvasWatchFaceService {
                 float b = height / 4.5f;
                 float c = width / 2.9f;
                 float d = height / 4.5f;
-                float e = width /  2.8f;
+                float e = width / 2.8f;
                 float f = height / 14f;
 
                 Paint paint = new Paint();
