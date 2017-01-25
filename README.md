@@ -3,7 +3,7 @@ Android Wear App
 
 Synchronizes weather information from OpenWeatherMap on Android Phones and Tablets. 
 
-Pre-requisites
+Libraries used:
 --------------
 Android SDK 21 or Higher
 Build Tools version 21.1.2
