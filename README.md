@@ -1,7 +1,7 @@
 Android Wear App
 ===================================
 
-Synchronizes weather information from OpenWeatherMap on Android Phones and Tablets. Used in the Udacity Advanced Android course.
+Synchronizes weather information from OpenWeatherMap on Android Phones and Tablets. 
 
 Pre-requisites
 --------------
