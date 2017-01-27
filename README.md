@@ -1,4 +1,4 @@
-Android Wear App
+AndroidWear 
 ===================================
 
 Synchronizes weather information from OpenWeatherMap on Android Phones and Tablets. 
